@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ホテル一覧</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 20px 0;
+            font-size: 24px;
+        }
+
+        #toc {
+            margin: 20px 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        #toc li {
+            margin: 10px 0;
+        }
+
+        #toc a {
+            text-decoration: none;
+            color: #007bff;
+            font-size: 18px;
+        }
+
+        .hotel {
+            margin: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .hotel img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .hotel h2 {
+            font-size: 20px;
+            margin: 15px 0;
+        }
+
+        .hotel p {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .hotel button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+
+        .hotel button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>ホテル一覧</h1>
+    <ul id="toc">
+        <li><a href="#hotel1">ホテルA</a></li>
+        <li><a href="#hotel2">ホテルB</a></li>
+        <li><a href="#hotel3">ホテルC</a></li>
+    </ul>
+
+    <div id="hotel1" class="hotel">
+        <img src="1.jpg" alt="ホテルA">
+        <h2>ホテルA</h2>
+        <p>ホテルAは、リラックスできる温泉が自慢の宿です。心地よい時間をお過ごしください。</p>
+        <button onclick="window.location.href='https://example.com/reserve/hotel_a'">予約ページ</button>
+    </div>
+
+    <div id="hotel2" class="hotel">
+        <img src="2.jpg" alt="ホテルB">
+        <h2>ホテルB</h2>
+        <p>ホテルBは、海が一望できる美しいロケーションを誇ります。贅沢なひとときをどうぞ。</p>
+        <button onclick="window.location.href='https://example.com/reserve/hotel_b'">予約ページ</button>
+    </div>
+
+    <div id="hotel3" class="hotel">
+        <img src="3.jpg" alt="ホテルC">
+        <h2>ホテルC</h2>
+        <p>ホテルCは、都市の中心部に位置し、便利なアクセスが特徴です。快適なご滞在を。</p>
+        <button onclick="window.location.href='https://example.com/reserve/hotel_c'">予約ページ</button>
+    </div>
+</body>
+</html>
