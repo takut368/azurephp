@@ -11,11 +11,14 @@ function generateDirectoryHtml($path, $indent = 0) {
         $itemPath = $path . DIRECTORY_SEPARATOR . $item;
         $padding = str_repeat('&nbsp;', $indent * 4);
 
+        // ディレクトリの場合
         if (is_dir($itemPath)) {
-            $html .= "<div style='margin-left: {$indent}em;'><b>📁 $item</b></div>\n";
+            $html .= "<div style='margin-left: {$indent}em;'><b>📁 <a href=\"?dir=" . urlencode($itemPath) . "\">$item</a></b></div>\n";
             $html .= generateDirectoryHtml($itemPath, $indent + 1);
         } else {
-            $html .= "<div style='margin-left: {$indent}em;'>📄 $item</div>\n";
+            // ファイルの場合
+            $fileUrl = str_replace($_SERVER['DOCUMENT_ROOT'], '', $itemPath);
+            $html .= "<div style='margin-left: {$indent}em;'>📄 <a href=\"$fileUrl\">$item</a></div>\n";
         }
     }
 
@@ -42,8 +45,8 @@ function createHtmlDirectoryStructure($rootDirectory) {
     return sprintf($htmlTemplate, $htmlContent);
 }
 
-// 現在のディレクトリを取得
-$rootDirectory = __DIR__;
+// 現在のディレクトリを取得、クエリパラメータが存在する場合はそのディレクトリを使用
+$rootDirectory = isset($_GET['dir']) ? $_GET['dir'] : __DIR__;
 
 // HTMLコンテンツ生成
 $htmlOutput = createHtmlDirectoryStructure($rootDirectory);
