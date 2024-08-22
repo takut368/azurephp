@@ -42,8 +42,8 @@ function createHtmlDirectoryStructure($rootDirectory) {
     return sprintf($htmlTemplate, $htmlContent);
 }
 
-// 使用方法
-$rootDirectory = '/path/to/your/directory'; // 対象のディレクトリパスに変更
+// 現在のディレクトリを取得
+$rootDirectory = __DIR__;
 
 // HTMLコンテンツ生成
 $htmlOutput = createHtmlDirectoryStructure($rootDirectory);
