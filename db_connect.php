@@ -1,19 +1,31 @@
 <?php
 // データベース接続情報
-$servername = "server202408.database.windows.net"; // サーバー名に .database.windows.net を追加します
-$username = "CloudSAc7d4b858"; // SQLサーバーの管理者ユーザー名
-$password = "Jnkmn368"; // 管理者パスワード
-$dbname = "database"; // データベース名
+$servername = "server202408.database.windows.net";
+$username = "CloudSAc7d4b858@server202408";
+$password = "Jnkmn368"; // ここにパスワードを入力
+$dbname = "database"; // あなたのデータベース名
 
-// 接続の確立
+// データベース接続の確立
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// 接続確認
+// 接続エラーチェック
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
-} else {
-    echo "Connected successfully to the database.";
 }
 
-// 継続するアプリケーションロジック
+// URLリダイレクトIDを指定して、その関連URLを取得
+$sql = "SELECT destination_url FROM destination_urls WHERE url_redirect_id = 1";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    // データの出力
+    while($row = $result->fetch_assoc()) {
+        echo "Destination URL: " . $row["destination_url"] . "<br>";
+    }
+} else {
+    echo "0 results";
+}
+
+// データベース接続を閉じる
+$conn->close();
 ?>
