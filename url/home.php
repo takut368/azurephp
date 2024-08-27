@@ -2,7 +2,7 @@
 // データベース接続情報
 $servername = "server202408.database.windows.net";
 $username = "CloudSAc7d4b858@server202408";
-$password = "your_password"; // ここにパスワードを入力
+$password = "Jnkmn368"; // ここにパスワードを入力
 $dbname = "database"; // あなたのデータベース名
 
 // データベース接続の確立
