@@ -2,15 +2,17 @@
 // データベース接続情報
 $servername = "server202408.database.windows.net";
 $username = "CloudSAc7d4b858@server202408";
-$password = "Jnkmn368"; // ここにパスワードを入力
-$dbname = "database"; // あなたのデータベース名
+$password = "Jnkmn368"; // 提供されたパスワード
+$dbname = "database"; // 確認されたデータベース名
 
-// データベース接続の確立
-$conn = new mysqli($servername, $username, $password, $dbname);
+// mysqliクラスのオブジェクトを作成
+$mysqli = new mysqli($servername, $username, $password, $dbname);
 
 // 接続エラーチェック
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+if ($mysqli->connect_error) {
+    die("Connection failed: " . $mysqli->connect_error);
+} else {
+    $mysqli->set_charset("utf8");
 }
 
 // フォームが送信された場合の処理
@@ -19,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $source_url = "https://example.com/" . uniqid(); // ユニークIDでSourceURLを生成
     
     // url_redirectsテーブルにSourceURLを挿入
-    $stmt = $conn->prepare("INSERT INTO url_redirects (source_url) VALUES (?)");
+    $stmt = $mysqli->prepare("INSERT INTO url_redirects (source_url) VALUES (?)");
     $stmt->bind_param("s", $source_url);
     $stmt->execute();
     $url_redirect_id = $stmt->insert_id;
@@ -28,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // destination_urlsテーブルに複数のDestinationURLを挿入
     foreach ($_POST['destination_url'] as $destination_url) {
         if (!empty($destination_url)) {
-            $stmt = $conn->prepare("INSERT INTO destination_urls (url_redirect_id, destination_url) VALUES (?, ?)");
+            $stmt = $mysqli->prepare("INSERT INTO destination_urls (url_redirect_id, destination_url) VALUES (?, ?)");
             $stmt->bind_param("is", $url_redirect_id, $destination_url);
             $stmt->execute();
             $stmt->close();
@@ -41,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 // データベース接続を閉じる
-$conn->close();
+$mysqli->close();
 ?>
 
 <!DOCTYPE html>
