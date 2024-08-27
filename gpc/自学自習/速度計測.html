@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>回線速度テスト</title>
+    <style>
+        #status {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        function updateStatus(message) {
+            document.getElementById('status').textContent = message;
+        }
+
+        function measureSpeed(dataSize, type) {
+            var startTime, endTime;
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+                    endTime = (new Date()).getTime();
+                    calculateSpeed(startTime, endTime, dataSize, type);
+                    if (type === 'upload') {
+                        measureSpeed(dataSize, 'download');
+                    } else {
+                        updateStatus('計測が完了しました');
+                    }
+                }
+            };
+
+            updateStatus(type === 'upload' ? '上り計測中...' : '下り計測中...');
+
+            var data = type === 'upload' ? new Uint8Array(dataSize) : null;
+            window.crypto.getRandomValues(data);
+
+            startTime = (new Date()).getTime();
+            xhr.open(type === 'upload' ? "POST" : "GET", "/path/to/test?size=" + dataSize, true);
+            xhr.send(data);
+        }
+
+        function calculateSpeed(startTime, endTime, dataSize, type) {
+            var duration = (endTime - startTime) / 1000; // 秒単位に変換
+            var bitsLoaded = dataSize * 8;
+            var speedMbps = (bitsLoaded / duration / 1024 / 1024).toFixed(2);
+
+            alert(type + " speed: " + speedMbps + " Mbps");
+        }
+
+        function startTest() {
+            measureSpeed(5000000, 'upload'); // 5 MBのデータでアップロード速度を計測
+        }
+    </script>
+</head>
+<body>
+    <button onclick="startTest()">回線速度をテストする</button>
+    <div id="status"></div>
+</body>
+</html>

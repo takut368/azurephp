@@ -1,0 +1,3 @@
+name,description,parameters
+Get-MgUser,"Retrieve a user from Microsoft Graph.","-Id:true:Enter Id; -Select:true:Enter properties"
+New-MgGroup,"Create a new group in Microsoft Graph.","-DisplayName:true:Enter Display Name; -MailEnabled:false:"

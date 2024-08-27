@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>カードゲーム</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  #gameArea {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  #startButton {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  .card {
+    padding: 10px 20px;
+    margin: 5px;
+    border: 1px solid #000;
+    cursor: pointer;
+  }
+  .selected {
+    border: 3px solid red;
+  }
+  #playerCards, #computerCards {
+    display: flex;
+  }
+  .label {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 10px;
+    display: none; /* Initially hide labels */
+  }
+</style>
+</head>
+<body>
+<div id="gameArea">
+  <div id="computerLabel" class="label">Computer</div>
+  <div id="computerCards"></div>
+  <button id="startButton">ゲーム開始</button>
+  <div id="playerCards"></div>
+  <div id="playerLabel" class="label">You</div>
+</div>
+
+<script>
+const cards = ["グー", "チョキ", "パー"];
+
+document.getElementById("startButton").addEventListener("click", function() {
+  this.style.display = "none"; // Hide the button
+  document.getElementById("computerLabel").style.display = 'block'; // Show computer label
+  document.getElementById("playerLabel").style.display = 'block'; // Show player label
+  startGame();
+});
+
+function startGame() {
+  const playerCards = chooseCards();
+  const computerCards = chooseCards();
+  displayCards(playerCards, 'playerCards', true);
+  displayCards(computerCards, 'computerCards', false);
+}
+
+function chooseCards() {
+  let shuffled = cards.sort(() => 0.5 - Math.random());
+  return [shuffled[0], shuffled[1]]; // Pick two unique cards
+}
+
+function displayCards(cardArray, elementId, isPlayer) {
+  const container = document.getElementById(elementId);
+  container.innerHTML = ''; // Reset cards
+  cardArray.forEach(card => {
+    const cardDiv = document.createElement("div");
+    cardDiv.textContent = card;
+    cardDiv.classList.add("card");
+    if (isPlayer) {
+      cardDiv.addEventListener("click", function() {
+        selectCard(cardDiv, container, elementId);
+      });
+    }
+    container.appendChild(cardDiv);
+  });
+}
+
+function selectCard(selectedCard, container, elementId) {
+  Array.from(container.children).forEach(card => {
+    card.classList.remove("selected");
+  });
+  selectedCard.classList.add("selected");
+  if (elementId === 'playerCards') {
+    // After the player selects a card, select a card for the computer
+    setTimeout(() => {
+      selectRandomCard('computerCards');
+    }, 500); // Execute after 0.5 seconds
+  }
+}
+
+function selectRandomCard(elementId) {
+  const container = document.getElementById(elementId);
+  const cards = Array.from(container.children);
+  const randomCard = cards[Math.floor(Math.random() * cards.length)];
+  randomCard.classList.add("selected");
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>URL 変換ツール</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        input[type="text"], input[type="submit"], button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #decodedUrl {
+            margin-top: 20px;
+            word-wrap: break-word;
+        }
+        .notification {
+            visibility: hidden;
+            min-width: 250px;
+            margin-left: -125px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 2px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            bottom: 30px;
+            font-size: 17px;
+        }
+        .notification.show {
+            visibility: visible;
+            -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+        @-webkit-keyframes fadein {
+            from {bottom: 0; opacity: 0;} 
+            to {bottom: 30px; opacity: 1;}
+        }
+        @keyframes fadein {
+            from {bottom: 0; opacity: 0;}
+            to {bottom: 30px; opacity: 1;}
+        }
+        @-webkit-keyframes fadeout {
+            from {bottom: 30px; opacity: 1;} 
+            to {bottom: 0; opacity: 0;}
+        }
+        @keyframes fadeout {
+            from {bottom: 30px; opacity: 1;}
+            to {bottom: 0; opacity: 0;}
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>URL 変換ツール</h1>
+        <form id="urlForm">
+            <label for="encodedUrl">エンコードされたURLを入力してください:</label>
+            <input type="text" id="encodedUrl" name="encodedUrl" placeholder="例: https://example.com/%E7%A4%BE%E5%86%85%E6%A8%99%E6%BA%96" required>
+            <input type="submit" value="変換">
+        </form>
+        <p id="decodedUrl"></p>
+        <button id="copyButton" style="display:none;">コピー</button>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script>
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = "notification show";
+            setTimeout(() => {
+                notification.className = notification.className.replace("show", "");
+            }, 3000);
+        }
+
+        document.getElementById('urlForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const encodedUrl = document.getElementById('encodedUrl').value;
+            if (!encodedUrl) {
+                showNotification('エラー: URLが入力されていません');
+                return;
+            }
+            const decodedUrl = decodeURIComponent(encodedUrl);
+            document.getElementById('decodedUrl').textContent = `デコードされたURL:\n${decodedUrl}`;
+            document.getElementById('copyButton').style.display = 'block';
+        });
+
+        document.getElementById('copyButton').addEventListener('click', function() {
+            const decodedUrl = document.getElementById('decodedUrl').textContent.replace('デコードされたURL:\n', '');
+            navigator.clipboard.writeText(decodedUrl).then(() => {
+                showNotification('URLがコピーされました');
+            }).catch(err => {
+                showNotification('コピーに失敗しました');
+                console.error('コピーに失敗しました', err);
+            });
+        });
+    </script>
+</body>
+</html>

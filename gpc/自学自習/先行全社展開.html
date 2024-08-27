@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive UI</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            flex-direction: column;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .month {
+            width: 100px;
+            height: 100px;
+            margin: 10px;
+            background-color: #6fbf73;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: white;
+            position: relative;
+            transition: background-color 0.3s;
+        }
+        .month:nth-child(2) {
+            background-color: #5faf72;
+        }
+        .month:nth-child(3) {
+            background-color: #4faf71;
+        }
+        .month:nth-child(4) {
+            background-color: #3f9f70;
+        }
+        .month:nth-child(5) {
+            background-color: #2f8f6f;
+        }
+        .month:nth-child(6) {
+            background-color: #1f7f6e;
+        }
+        .label {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            color: white;
+            cursor: pointer;
+            margin: 10px;
+            position: relative;
+        }
+        .label.all {
+            background-color: red;
+        }
+        .label.problem {
+            background-color: purple;
+        }
+        .label.pilot {
+            background-color: blue;
+        }
+        .close-btn {
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            color: black;
+            border: none;
+            border-radius: 50%;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            display: none;
+        }
+        .labels-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .reset-container {
+            margin-top: 20px;
+        }
+        .reset-btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            transition: background-color 0.3s;
+        }
+        .reset-btn:hover {
+            background-color: #0056b3;
+        }
+        .bubble {
+            position: absolute;
+            background-color: white;
+            color: black;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="month" data-month="3月">3月</div>
+        <div class="month" data-month="6月">6月</div>
+        <div class="month" data-month="9月">9月</div>
+        <div class="month" data-month="12月">12月</div>
+        <div class="month" data-month="3月">3月</div>
+        <div class="month" data-month="6月">6月</div>
+    </div>
+    <div class="labels-container">
+        <div class="label all" id="all">全社</div>
+        <div class="label problem" id="problem">問題発生</div>
+        <div class="label pilot" id="pilot">先行</div>
+    </div>
+    <div class="reset-container">
+        <button class="reset-btn" id="reset-btn">リセット</button>
+    </div>
+    <div class="bubble" id="bubble">リリース！</div>
+    <div class="bubble" id="bubble-download">ダウンロード！</div>
+    
+    <script>
+        let selectedLabel = null;
+        const originalColors = Array.from(document.querySelectorAll('.month')).map(month => month.style.backgroundColor);
+        let bubbleTimeout;
+
+        function showBubble(bubbleId, from, to) {
+            const bubble = document.getElementById(bubbleId);
+            const rectFrom = from.getBoundingClientRect();
+            const rectTo = to.getBoundingClientRect();
+            const x = (rectFrom.left + rectTo.left) / 2;
+            const y = Math.min(rectFrom.top, rectTo.top) - 40;
+            bubble.style.left = `${x}px`;
+            bubble.style.top = `${y}px`;
+            bubble.style.display = 'block';
+
+            clearTimeout(bubbleTimeout);
+            bubbleTimeout = setTimeout(() => {
+                bubble.style.display = 'none';
+            }, 2000);
+        }
+
+        document.querySelectorAll('.label').forEach(label => {
+            label.addEventListener('click', () => {
+                selectedLabel = label;
+            });
+        });
+
+        document.querySelectorAll('.month').forEach((month, index, months) => {
+            const closeButton = document.createElement('button');
+            closeButton.innerText = '×';
+            closeButton.className = 'close-btn';
+            closeButton.addEventListener('click', () => {
+                month.style.backgroundColor = originalColors[index];
+                closeButton.style.display = 'none';
+            });
+            month.appendChild(closeButton);
+
+            month.addEventListener('click', () => {
+                if (selectedLabel) {
+                    const previousMonth = selectedLabel.parentElement;
+                    const previousIndex = Array.from(months).indexOf(previousMonth);
+
+                    if (selectedLabel.id === 'problem') {
+                        month.style.backgroundColor = 'purple';
+                        closeButton.style.display = 'block';
+                    } else {
+                        // 既存の同じタイプのラベルを削除
+                        document.querySelectorAll(`.month .${selectedLabel.id}`).forEach(existingLabel => {
+                            existingLabel.remove();
+                        });
+
+                        // 新しいラベルを追加
+                        const clone = selectedLabel.cloneNode(true);
+                        clone.style.position = 'absolute';
+                        clone.style.width = '40px';
+                        clone.style.height = '40px';
+                        clone.style.fontSize = '12px';
+                        clone.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            selectedLabel = clone;
+                        });
+                        if (selectedLabel.id === 'all') {
+                            clone.style.bottom = '5px';
+                            clone.style.left = '5px';
+                        } else if (selectedLabel.id === 'pilot') {
+                            clone.style.bottom = '5px';
+                            clone.style.right = '5px';
+                        }
+                        month.appendChild(clone);
+
+                        // 吹き出し表示条件をチェック
+                        if (selectedLabel.id === 'all' && previousMonth && previousMonth.nextElementSibling === month && month.querySelector('.label.pilot')) {
+                            const from = previousMonth;
+                            const to = month;
+                            hideBubble('bubble-download');
+                            showBubble('bubble', from, to);
+                        } else if (selectedLabel.id === 'pilot' && previousMonth && previousMonth.querySelector('.label.all') && months[previousIndex + 1] === month) {
+                            const from = previousMonth;
+                            const to = month;
+                            hideBubble('bubble');
+                            showBubble('bubble-download', from, to);
+                        }
+                    }
+                    selectedLabel = null;
+                }
+            });
+        });
+
+        function hideBubble(bubbleId) {
+            const bubble = document.getElementById(bubbleId);
+            if (bubble) {
+                bubble.style.display = 'none';
+            }
+        }
+
+        document.body.addEventListener('click', (e) => {
+            if (selectedLabel && !selectedLabel.classList.contains('label') && !selectedLabel.classList.contains('close-btn')) {
+                selectedLabel.remove();
+                selectedLabel = null;
+            }
+        });
+
+        document.getElementById('reset-btn').addEventListener('click', () => {
+            document.querySelectorAll('.month .label').forEach(label => label.remove());
+            document.querySelectorAll('.month').forEach((month, index) => {
+                month.style.backgroundColor = originalColors[index];
+                month.querySelector('.close-btn').style.display = 'none';
+            });
+            hideBubble('bubble');
+            hideBubble('bubble-download');
+        });
+    </script>
+</body>
+</html>

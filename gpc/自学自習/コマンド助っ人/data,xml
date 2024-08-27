@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<commands>
+    <command id="connect-exchange" needsInput="false">
+        <description>Connect-ExchangeOnline - Exchange Onlineへの接続</description>
+    </command>
+    <command id="disconnect-exchange" needsInput="false">
+        <description>Disconnect-ExchangeOnline - Exchange Onlineからの接続を切断</description>
+    </command>
+    <command id="get-mailbox" needsInput="true">
+        <description>Get-Mailbox - メールボックスの情報を取得</description>
+        <input type="text" placeholder="ユーザーIDまたはメールアドレス" />
+    </command>
+    <!-- 他のコマンドも同様に追加 -->
+</commands>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Interactive Mario Game</title>
+  <style>
+    body {
+      overflow: hidden; /* スクロール禁止 */
+      margin: 0; /* 余白なし */
+      background: #FFFFFF; /* 背景色：白 */
+    }
+
+    #game {
+      position: relative; /* 相対位置 */
+      width: 100vw; /* 幅：ビューポートに対して100% */
+      height: 100vh; /* 高さ：ビューポートに対して100% */
+      background: #FFFFFF; /* 背景色：白 */
+      overflow: hidden; /* 内部要素のはみ出し非表示 */
+    }
+
+    .player {
+      position: absolute; /* 絶対位置 */
+      bottom: 50px; /* 下端から50px */
+      width: 50px; /* 幅：50px */
+      height: 50px; /* 高さ：50px */
+      background: #FF0000; /* 背景色：赤 */
+    }
+
+    .obstacle {
+      position: absolute; /* 絶対位置 */
+      width: 50px; /* 幅：50px */
+      height: 50px; /* 高さ：50px */
+      background: #000000; /* 背景色：黒 */
+    }
+
+    .goal {
+      position: absolute; /* 絶対位置 */
+      top: 10px; /* 上端から10px */
+      width: 50px; /* 幅：50px */
+      height: 50px; /* 高さ：50px */
+      background: #0000FF; /* 背景色：青 */
+    }
+
+    #message {
+      position: absolute; /* 絶対位置 */
+      top: 50%; /* 上端から50%の位置 */
+      left: 50%; /* 左端から50%の位置 */
+      transform: translate(-50%, -50%); /* 中心位置修正 */
+      color: black; /* 文字色：黒 */
+      font-size: 24px; /* フォントサイズ */
+      display: none; /* 初期表示：非表示 */
+    }
+  </style>
+</head>
+
+<body>
+  <div id="game">
+    <div class="player"></div>
+    <div id="message">ゲームクリア!</div>
+  </div>
+  <script>
+    const game = document.getElementById('game'); // ゲーム領域取得
+    const player = document.querySelector('.player'); // プレイヤー要素取得
+    const gameWidth = game.clientWidth; // ゲームの幅
+    const gameHeight = game.clientHeight; // ゲームの高さ
+    let playerSpeed = 5; // プレイヤー速度
+    let jumpPower = 10; // ジャンプ力
+    let playerX = 10; // プレイヤーX座標
+    let playerY = 0; // プレイヤーY座標
+    let gravity = 0.5; // 重力値
+    let isJumping = false; // ジャンプ状態
+    let jumpSpeed = 0; // ジャンプ速度
+    const obstacles = []; // 障害物リスト
+    let keys = { left: false, right: false, up: false }; // キー状態
+
+    game.onclick = function(e) { // クリックイベント
+      const rect = game.getBoundingClientRect(); // ゲーム領域の位置
+      const x = e.clientX - rect.left - 25; // クリックX座標
+      const y = gameHeight - (e.clientY - rect.top) - 25; // クリックY座標
+      createObstacle(x, y); // 障害物生成
+    };
+
+    function createObstacle(x, y) { // 障害物生成関数
+      const obstacle = document.createElement('div'); // 障害物要素作成
+      obstacle.classList.add('obstacle'); // クラス設定
+      obstacle.style.left = `${x}px`; // X座標設定
+      obstacle.style.bottom = `${y}px`; // Y座標設定
+      game.appendChild(obstacle); // ゲーム領域へ追加
+      const obstacleObj = { dom: obstacle, x: x, y: y, width: 50, height: 50 }; // 障害物オブジェクト
+      obstacles.push(obstacleObj); // 障害物リストへ追加
+      setTimeout(() => {
+        game.removeChild(obstacle); // 障害物削除
+        obstacles.splice(obstacles.indexOf(obstacleObj), 1); // リストから削除
+      }, 3000); // 3秒後
+    }
+
+    function checkCollision() { // 衝突判定関数
+      const playerRect = { left: playerX, top: playerY, width: 50, height: 50 }; // プレイヤー矩形
+      let onGround = false; // 地面接触状態
+      obstacles.forEach(obstacle => { // 障害物繰り返し
+        const obstacleRect = { left: obstacle.x, top: obstacle.y, width: obstacle.width, height: obstacle.height }; // 障害物矩形
+        if (playerRect.left < obstacleRect.left + obstacleRect.width &&
+          playerRect.left + playerRect.width > obstacleRect.left &&
+          playerRect.top < obstacleRect.top + obstacleRect.height &&
+          playerRect.top + playerRect.height > obstacleRect.top) { // 矩形衝突判定
+          if (playerY >= obstacle.y + obstacle.height && jumpSpeed > 0) {
+            jumpSpeed = 0; // 底部衝突
+          } else if (playerY < obstacle.y + obstacle.height && jumpSpeed < 0) {
+            playerY = obstacle.y + obstacle.height; // 頂部衝突
+            isJumping = false; // ジャンプ終了
+            onGround = true; // 地面接触
+          } else if ((playerX + playerRect.width > obstacle.x || playerX < obstacle.x + obstacle.width)) {
+            playerSpeed = 0; // 側部衝突
+          }
+        }
+      });
+      if (!onGround && playerY > 0) playerSpeed = 5; // 接地していない場合速度リセット
+    }
+
+    function movePlayer() { // プレイヤー移動関数
+      if (keys.right) playerX += playerSpeed; // 右移動
+      if (keys.left) playerX -= playerSpeed; // 左移動
+      if (keys.up && !isJumping) { // ジャンプ判定
+        isJumping = true; // ジャンプ状態
+        jumpSpeed = jumpPower; // ジャンプ速度
+      }
+      playerY += jumpSpeed; // Y座標更新
+      jumpSpeed -= gravity; // 重力適用
+      if (playerY <= 0) { // 地面チェック
+        playerY = 0; // 地面固定
+        isJumping = false; // ジャンプ終了
+        jumpSpeed = 0; // 速度リセット
+      }
+      playerX = Math.max(0, Math.min(gameWidth - 50, playerX)); // X座標制限
+      checkCollision(); // 衝突判定呼び出し
+      player.style.left = playerX + 'px'; // CSS適用
+      player.style.bottom = playerY + 'px'; // CSS適用
+    }
+
+    function gameLoop() { // ゲームループ関数
+      movePlayer(); // プレイヤー移動呼び出し
+      requestAnimationFrame(gameLoop); // 次フレーム要求
+    }
+
+    document.addEventListener('keydown', (e) => { // キーダウンイベント
+      if (e.key === 'D' || e.key === 'd') keys.right = true; // 右キー
+      if (e.key === 'A' || e.key === 'a') keys.left = true; // 左キー
+      if (e.key === 'W' || e.key === 'w' || e.keyCode === 32) keys.up = true; // 上キー
+    });
+
+    document.addEventListener('keyup', (e) => { // キーアップイベント
+      if (e.key === 'D' || e.key === 'd') keys.right = false; // 右キー解除
+      if (e.key === 'A' || e.key === 'a') keys.left = false; // 左キー解除
+      if (e.key === 'W' || e.key === 'w' || e.keyCode === 32) keys.up = false; // 上キー解除
+      playerSpeed = 5; // 速度リセット
+    });
+
+    requestAnimationFrame(gameLoop); // ゲームループ開始
+  </script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Microsoft Graph API - ユーザー情報取得</title>
+    <script>
+        async function getAccessToken() {
+            try {
+                const response = await fetch('/get-token', {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                return data.token;
+            } catch (error) {
+                console.error('Error fetching access token:', error);
+                return null;
+            }
+        }
+
+        async function getUserDetails() {
+            const accessToken = await getAccessToken();
+            if (!accessToken) {
+                document.getElementById("userInfo").textContent = "アクセストークンの取得に失敗しました。";
+                return;
+            }
+
+            try {
+                const response = await fetch('https://graph.microsoft.com/v1.0/me', {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const user = await response.json();
+                document.getElementById("userInfo").textContent = JSON.stringify(user, null, 2);
+            } catch (error) {
+                console.error('Error fetching user details:', error);
+                document.getElementById("userInfo").textContent = "ユーザー情報の取得に失敗しました。";
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Microsoft Graph API - ユーザー情報取得</h1>
+    <button onclick="getUserDetails()">ユーザー情報を取得</button>
+    <pre id="userInfo"></pre>
+</body>
+</html>

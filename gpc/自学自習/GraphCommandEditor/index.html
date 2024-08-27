@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graph Command Editor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .command-container {
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .command-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .command-header h2 {
+            margin: 0;
+            cursor: pointer;
+        }
+        .command-header h2:hover {
+            color: #0078D4;
+        }
+        .parameters {
+            margin-top: 10px;
+            display: none;
+        }
+        .parameter {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        .parameter label {
+            margin-left: 5px;
+            flex-shrink: 0;
+        }
+        .parameter input[type="text"] {
+            margin-left: 5px;
+            padding: 3px;
+            flex-grow: 1;
+        }
+        .copy-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .copy-button:hover {
+            background-color: #45a049;
+        }
+        .command-input {
+            width: 100%;
+            margin-top: 10px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Graph Command Editor</h1>
+    <div id="commands"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('commands.csv')
+                .then(response => response.text())
+                .then(data => {
+                    const commandsContainer = document.getElementById('commands');
+                    const rows = data.trim().split('\n').slice(1); // Remove header and trim spaces
+                    rows.forEach(row => {
+                        const [name, description, parameters] = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/); // Split on commas outside of quotes
+
+                        const commandDiv = document.createElement('div');
+                        commandDiv.className = 'command-container';
+
+                        const headerDiv = document.createElement('div');
+                        headerDiv.className = 'command-header';
+
+                        const title = document.createElement('h2');
+                        title.textContent = name.replace(/(^"|"$)/g, ''); // Remove surrounding quotes if present
+                        title.onclick = () => {
+                            const parametersDiv = document.getElementById(`${name}-params`);
+                            parametersDiv.style.display = parametersDiv.style.display === 'none' ? 'block' : 'none';
+                        };
+
+                        const copyButton = document.createElement('button');
+                        copyButton.className = 'copy-button';
+                        copyButton.textContent = 'Copy';
+                        copyButton.onclick = () => copyCommand(name);
+
+                        headerDiv.appendChild(title);
+                        headerDiv.appendChild(copyButton);
+
+                        const descriptionP = document.createElement('p');
+                        descriptionP.textContent = description.replace(/(^"|"$)/g, ''); // Remove surrounding quotes if present
+
+                        const parametersDiv = document.createElement('div');
+                        parametersDiv.className = 'parameters';
+                        parametersDiv.id = `${name}-params`;
+
+                        const paramList = parameters.split('; ').map(param => param.replace(/(^"|"$)/g, '')); // Remove surrounding quotes if present
+                        paramList.forEach(param => {
+                            const [paramName, requiresValue, placeholder] = param.split(':');
+
+                            const paramDiv = document.createElement('div');
+                            paramDiv.className = 'parameter';
+
+                            const checkbox = document.createElement('input');
+                            checkbox.type = 'checkbox';
+                            checkbox.id = `${name}-${paramName}`;
+                            checkbox.onchange = () => updateCommand(name);
+
+                            const label = document.createElement('label');
+                            label.htmlFor = `${name}-${paramName}`;
+                            label.textContent = paramName;
+                            label.title = placeholder;
+
+                            paramDiv.appendChild(checkbox);
+                            paramDiv.appendChild(label);
+
+                            if (requiresValue === 'true') {
+                                const textInput = document.createElement('input');
+                                textInput.type = 'text';
+                                textInput.id = `${name}-${paramName}-value`;
+                                textInput.placeholder = placeholder;
+                                textInput.oninput = () => updateCommand(name);
+                                paramDiv.appendChild(textInput);
+                            }
+
+                            parametersDiv.appendChild(paramDiv);
+                        });
+
+                        const commandInput = document.createElement('input');
+                        commandInput.type = 'text';
+                        commandInput.id = `${name}-command`;
+                        commandInput.value = name;
+                        commandInput.className = 'command-input';
+                        commandInput.readOnly = true;
+
+                        commandDiv.appendChild(headerDiv);
+                        commandDiv.appendChild(descriptionP);
+                        commandDiv.appendChild(parametersDiv);
+                        commandDiv.appendChild(commandInput);
+
+                        commandsContainer.appendChild(commandDiv);
+                    });
+                });
+        });
+
+        function updateCommand(commandName) {
+            const commandInput = document.getElementById(`${commandName}-command`);
+            let command = commandName.replace(/(^"|"$)/g, ''); // Remove surrounding quotes if present
+            document.querySelectorAll(`#${commandName}-params .parameter`).forEach(parameter => {
+                const checkbox = parameter.querySelector('input[type="checkbox"]');
+                if (checkbox.checked) {
+                    const textInput = parameter.querySelector('input[type="text"]');
+                    if (textInput) {
+                        const value = textInput.value.trim();
+                        if (value) {
+                            command += ` ${checkbox.labels[0].innerText} ${value}`;
+                        }
+                    } else {
+                        command += ` ${checkbox.labels[0].innerText}`;
+                    }
+                }
+            });
+            commandInput.value = command;
+        }
+
+        function copyCommand(commandName) {
+            const commandInput = document.getElementById(`${commandName}-command`);
+            commandInput.select();
+            commandInput.setSelectionRange(0, 99999); // For mobile devices
+            document.execCommand("copy");
+            alert("Copied the command: " + commandInput.value);
+        }
+    </script>
+
+</body>
+</html>

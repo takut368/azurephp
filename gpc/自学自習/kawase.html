@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>図形回避ゲーム</title>
+<style>
+  body, html {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  #startButton, #restartButton, #numberInput {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  #gameOverScreen {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background-color: white;
+    border: 1px solid black;
+    padding: 20px;
+  }
+  .shape {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background-color: red;
+  }
+  #timer {
+    position: fixed;
+    left: 10px;
+    top: 10px;
+    font-size: 16px;
+    background-color: #fff;
+    padding: 5px;
+    border: 1px solid #000;
+  }
+</style>
+</head>
+<body>
+<button id="startButton">開始</button>
+<input type="number" id="numberInput" value="1" step="0.1" style="display: none; margin-bottom: 20px;" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode == 46">
+<div id="timer">00:00:00</div>
+<div id="gameOverScreen">
+  <p id="finalScore">スコア: 0</p>
+  <p id="finalTime">タイム: 00:00:00</p>
+  <button id="restartButton">もう一度</button>
+</div>
+<script>
+  let shapes = [];
+  let gameStarted = false;
+  let gameOver = false;
+  let startTime;
+  let intervalId;
+  let numberInput = document.getElementById('numberInput');
+
+  const startButton = document.getElementById('startButton');
+  const gameOverScreen = document.getElementById('gameOverScreen');
+  const restartButton = document.getElementById('restartButton');
+  const timerDisplay = document.getElementById('timer');
+  const finalScore = document.getElementById('finalScore');
+  const finalTime = document.getElementById('finalTime');
+
+  startButton.addEventListener('click', startGame);
+
+  restartButton.addEventListener('click', function() {
+    gameOverScreen.style.display = 'none';
+    startButton.style.display = 'inline';
+    numberInput.style.display = 'inline';
+  });
+
+  function startGame() {
+    startButton.style.display = 'none';
+    numberInput.style.display = 'none';
+    gameStarted = true;
+    gameOver = false;
+    shapes = [];
+    startTime = new Date();
+    updateTimer();
+    addShapes();
+    document.addEventListener('mouseout', function(event) {
+      if (!event.relatedTarget && !event.toElement) {
+        endGame();
+      }
+    });
+  }
+
+  function updateTimer() {
+    if (!gameStarted || gameOver) return;
+    const now = new Date();
+    const elapsed = new Date(now - startTime);
+    const hours = elapsed.getUTCHours().toString().padStart(2, '0');
+    const minutes = elapsed.getMinutes().toString().padStart(2, '0');
+    const seconds = elapsed.getSeconds().toString().padStart(2, '0');
+    timerDisplay.textContent = `${hours}:${minutes}:${seconds}`;
+    setTimeout(updateTimer, 1000);
+  }
+
+  function addShapes() {
+    if (gameOver) return;
+    const quantity = parseFloat(numberInput.value);
+    for (let i = 0; i < quantity; i++) {
+      const shape = document.createElement('div');
+      shape.className = 'shape';
+      const x = Math.random() * window.innerWidth;
+      const y = Math.random() * window.innerHeight;
+      shape.style.left = `${x}px`;
+      shape.style.top = `${y}px`;
+      shape.style.backgroundColor = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
+      document.body.appendChild(shape);
+      shapes.push(shape);
+      shape.addEventListener('mouseover', endGame);
+      moveShape(shape);
+    }
+    setTimeout(addShapes, 2000 / quantity); // Adjust timing based on input
+  }
+
+  function moveShape(shape) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = (Math.random() * 3) + 1; // Random speed between 1 and 4
+    const deltaX = Math.cos(angle) * speed;
+    const deltaY = Math.sin(angle) * speed;
+
+    function animate() {
+      if (gameOver) return;
+      let rect = shape.getBoundingClientRect();
+      shape.style.top = `${rect.top + deltaY}px`;
+      shape.style.left = `${rect.left + deltaX}px`;
+      if (rect.top < -50 || rect.bottom > window.innerHeight + 50 || rect.left < -50 || rect.right > window.innerWidth + 50) {
+        shape.remove();
+      } else {
+        requestAnimationFrame(animate);
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+
+  function endGame() {
+    gameOver = true;
+    gameStarted = false;
+    shapes.forEach(shape => shape.remove());
+    shapes = [];
+    gameOverScreen.style.display = 'block';
+    numberInput.style.display = 'inline'; // Show input again when game ends
+    finalScore.textContent = `スコア: ${shapes.length}`;
+    finalTime.textContent = `タイム: ${timerDisplay.textContent}`;
+    document.removeEventListener('mouseout', endGame);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Comparison Tool</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            height: 50%;
+        }
+        textarea, .result {
+            width: 45%;
+            height: 90%;
+            margin: 2%;
+            padding: 10px;
+            font-size: 16px;
+            white-space: pre-wrap;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        .result {
+            border: none;
+            background-color: #f9f9f9;
+        }
+        .highlight {
+            color: red;
+            font-weight: bold;
+        }
+        .results-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            height: 50%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Text Comparison Tool</h1>
+    <div class="container">
+        <textarea id="text1" placeholder="Enter text here..."></textarea>
+        <textarea id="text2" placeholder="Enter text here..."></textarea>
+    </div>
+    <div class="results-container">
+        <div id="result1" class="result"></div>
+        <div id="result2" class="result"></div>
+    </div>
+    <script>
+        document.getElementById('text1').addEventListener('input', compareTexts);
+        document.getElementById('text2').addEventListener('input', compareTexts);
+
+        function compareTexts() {
+            const text1 = document.getElementById('text1').value.split('\n');
+            const text2 = document.getElementById('text2').value.split('\n');
+            let result1 = '';
+            let result2 = '';
+
+            const maxLength = Math.max(text1.length, text2.length);
+
+            for (let i = 0; i < maxLength; i++) {
+                const line1 = text1[i] || '';
+                const line2 = text2[i] || '';
+                const [highlighted1, highlighted2] = highlightDifferences(line1, line2);
+                result1 += highlighted1 + '\n';
+                result2 += highlighted2 + '\n';
+            }
+
+            document.getElementById('result1').innerHTML = result1;
+            document.getElementById('result2').innerHTML = result2;
+        }
+
+        function highlightDifferences(line1, line2) {
+            let start = 0;
+            let highlighted1 = '';
+            let highlighted2 = '';
+
+            while (start < line1.length || start < line2.length) {
+                // Find start of difference
+                while (start < line1.length && start < line2.length && line1[start] === line2[start]) {
+                    highlighted1 += line1[start];
+                    highlighted2 += line2[start];
+                    start++;
+                }
+
+                // Find end of difference
+                let diff1 = '';
+                let diff2 = '';
+                while (start < line1.length && start < line2.length && line1[start] !== line2[start]) {
+                    diff1 += line1[start];
+                    diff2 += line2[start];
+                    start++;
+                }
+
+                if (diff1 || diff2) {
+                    highlighted1 += `<span class="highlight">${diff1}</span>`;
+                    highlighted2 += `<span class="highlight">${diff2}</span>`;
+                }
+
+                // Find next start of similarity
+                while (start < line1.length && start < line2.length && line1[start] === line2[start]) {
+                    highlighted1 += line1[start];
+                    highlighted2 += line2[start];
+                    start++;
+                }
+            }
+
+            // Add remaining characters if lines are of different lengths
+            if (start < line1.length) {
+                highlighted1 += `<span class="highlight">${line1.slice(start)}</span>`;
+            }
+            if (start < line2.length) {
+                highlighted2 += `<span class="highlight">${line2.slice(start)}</span>`;
+            }
+
+            return [highlighted1, highlighted2];
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Redirecting...</title>
+    <script>
+      window.onload = function () {
+        // 現在のURLを取得
+        var currentUrl = window.location.href;
+
+        // URL_Aの末尾によってリダイレクト先を決定
+        if (currentUrl.endsWith("g")) {
+          window.open("https://www.google.com/", "_blank");
+          window.open("https://www.google.com/", "_blank");
+          window.open("https://www.google.com/", "_blank");
+          window.open("https://www.google.com/", "_blank");
+          window.open("https://www.google.com/", "_blank");
+          window.open("https://www.google.com/", "_blank");
+          window.open("https://www.google.com/", "_blank");
+          window.open("https://www.google.com/", "_blank");
+        } else if (currentUrl.endsWith("suffix2")) {
+          window.open("URL_C", "_blank");
+        } else if (currentUrl.endsWith("suffix3")) {
+          window.open("URL_D", "_blank");
+        } else {
+          // 何もしないか、デフォルトの処理
+          // window.open("defaultURL", "_blank");
+        }
+      };
+    </script>
+  </head>
+</html>

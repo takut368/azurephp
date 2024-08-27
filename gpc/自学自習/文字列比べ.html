@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>リッチテキスト比較チェッカー</title>
+    <style>
+      body,
+      html {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        font-family: Arial, sans-serif;
+      }
+      #container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+      }
+      .line-numbers {
+        width: 30px;
+        padding: 20px;
+        box-sizing: border-box;
+        background-color: #eee;
+        white-space: pre-wrap;
+        overflow-y: auto;
+        text-align: right;
+      }
+      .editable-area {
+        width: calc(50% - 30px);
+        height: 100%;
+        padding: 20px;
+        overflow-y: auto;
+        box-sizing: border-box;
+        font-size: 16px;
+        border-left: 1px solid #ccc;
+        background-color: #f0f0f0;
+      }
+      .highlight {
+        color: red;
+        font-weight: bold;
+      }
+      #compareButton {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <div class="line-numbers" id="leftLines"></div>
+      <div id="left" class="editable-area" contenteditable="true"></div>
+      <div class="line-numbers" id="rightLines"></div>
+      <div id="right" class="editable-area" contenteditable="true"></div>
+    </div>
+    <button id="compareButton" onclick="toggleCompare()">比較する</button>
+    <script>
+      let isComparing = false;
+      let originalLeftText = "";
+      let originalRightText = "";
+
+      document.getElementById("left").addEventListener("input", updateText);
+      document.getElementById("right").addEventListener("input", updateText);
+
+      function toggleCompare() {
+        const button = document.getElementById("compareButton");
+        const left = document.getElementById("left");
+        const right = document.getElementById("right");
+
+        if (!isComparing) {
+          originalLeftText = left.innerText;
+          originalRightText = right.innerText;
+          button.textContent = "編集する";
+          left.setAttribute("contenteditable", "false");
+          right.setAttribute("contenteditable", "false");
+          compareText();
+        } else {
+          button.textContent = "比較する";
+          left.setAttribute("contenteditable", "true");
+          right.setAttribute("contenteditable", "true");
+          resetTextStyles();
+        }
+        isComparing = !isComparing;
+      }
+
+      function updateText() {
+        const left = document.getElementById("left");
+        const right = document.getElementById("right");
+        const leftLines = document.getElementById("leftLines");
+        const rightLines = document.getElementById("rightLines");
+
+        leftLines.textContent = "";
+        rightLines.textContent = "";
+        const maxLines = Math.max(
+          left.innerText.split("\n").length,
+          right.innerText.split("\n").length
+        );
+
+        for (let i = 1; i <= maxLines; i++) {
+          leftLines.textContent += i + "\n";
+          rightLines.textContent += i + "\n";
+        }
+      }
+
+      function compareText() {
+        const left = document.getElementById("left");
+        const right = document.getElementById("right");
+        const linesLeft = originalLeftText.split("\n");
+        const linesRight = originalRightText.split("\n");
+        const maxLength = Math.max(linesLeft.length, linesRight.length);
+
+        left.innerHTML = "";
+        right.innerHTML = "";
+
+        for (let i = 0; i < maxLength; i++) {
+          const lineLeft = linesLeft[i] || "";
+          const lineRight = linesRight[i] || "";
+          left.innerHTML += `<div>${highlightDifferences(
+            lineLeft,
+            lineRight
+          )}</div>`;
+          right.innerHTML += `<div>${highlightDifferences(
+            lineRight,
+            lineLeft
+          )}</div>`;
+        }
+      }
+
+      function highlightDifferences(line1, line2) {
+        const minLength = Math.min(line1.length, line2.length);
+        let prefix = 0;
+        while (prefix < minLength && line1[prefix] === line2[prefix]) {
+          prefix++;
+        }
+
+        let suffix = 0;
+        while (
+          suffix < minLength - prefix &&
+          line1[line1.length - 1 - suffix] === line2[line2.length - 1 - suffix]
+        ) {
+          suffix++;
+        }
+
+        const middle1 = line1.substring(prefix, line1.length - suffix);
+        const middle2 = line2.substring(prefix, line2.length - suffix);
+        const start1 = line1.substring(0, prefix);
+        const end1 = line1.substring(line1.length - suffix);
+        const start2 = line2.substring(0, prefix);
+        const end2 = line2.substring(line2.length - suffix);
+
+        return `${start1}<span class="highlight">${middle1}</span>${end1}`;
+      }
+
+      function resetTextStyles() {
+        const left = document.getElementById("left");
+        const right = document.getElementById("right");
+        left.innerHTML = originalLeftText
+          .split("\n")
+          .map((line) => `<div>${line}</div>`)
+          .join("");
+        right.innerHTML = originalRightText
+          .split("\n")
+          .map((line) => `<div>${line}</div>`)
+          .join("");
+      }
+
+      updateText(); // Initial line number update
+    </script>
+  </body>
+</html>

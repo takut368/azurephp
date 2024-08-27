@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文字プロパティ表示</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            padding-top: 20px;
+        }
+        #inputText {
+            position: fixed;
+            top: 20px;
+            width: calc(100% - 40px);
+            max-width: 760px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        table {
+            margin-top: 100px;
+            border-collapse: collapse;
+            width: 100%;
+            table-layout: fixed;
+        }
+        thead {
+            background-color: #f2f2f2;
+        }
+        tbody {
+            display: block;
+            height: calc(100vh - 160px);
+            overflow-y: auto;
+            width: 100%;
+        }
+        tbody tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <input type="text" id="inputText" placeholder="文字を入力してください">
+        <table id="propertiesTable" style="display: none;">
+            <thead>
+                <tr>
+                    <th>Index</th>
+                    <th>Character</th>
+                    <th>Char Code</th>
+                    <th>Unicode</th>
+                    <th>ASCII</th>
+                    <th>Key Code</th>
+                    <th>Event Type</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const inputField = document.getElementById('inputText');
+        const table = document.getElementById('propertiesTable');
+        const tbody = table.querySelector('tbody');
+
+        inputField.addEventListener('input', logKey);
+
+        function logKey(event) {
+            const input = inputField.value;
+            tbody.innerHTML = '';
+
+            for (let i = 0; i < input.length; i++) {
+                const char = input[i];
+                const tr = document.createElement('tr');
+
+                const indexCell = document.createElement('td');
+                indexCell.textContent = i;
+                tr.appendChild(indexCell);
+
+                const charCell = document.createElement('td');
+                charCell.textContent = char;
+                tr.appendChild(charCell);
+
+                const charCodeCell = document.createElement('td');
+                charCodeCell.textContent = char.charCodeAt(0);
+                tr.appendChild(charCodeCell);
+
+                const unicodeCell = document.createElement('td');
+                unicodeCell.textContent = char.codePointAt(0).toString(16).toUpperCase();
+                tr.appendChild(unicodeCell);
+
+                const asciiCell = document.createElement('td');
+                asciiCell.textContent = char.charCodeAt(0) <= 127 ? char.charCodeAt(0) : 'N/A';
+                tr.appendChild(asciiCell);
+
+                const keyCodeCell = document.createElement('td');
+                keyCodeCell.textContent = event.inputType === "deleteContentBackward" ? "N/A" : event.data.charCodeAt(0);
+                tr.appendChild(keyCodeCell);
+
+                const eventTypeCell = document.createElement('td');
+                eventTypeCell.textContent = event.inputType;
+                tr.appendChild(eventTypeCell);
+
+                tbody.appendChild(tr);
+            }
+
+            if (input.length > 0) {
+                table.style.display = 'table';
+            } else {
+                table.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

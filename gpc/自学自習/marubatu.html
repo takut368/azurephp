@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3x3 マルバツゲーム</title>
+    <style>
+        body {
+            display: flex;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+        #dev-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: black;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        #console {
+            width: 200px;
+            background-color: #000;
+            color: #0f0;
+            padding: 10px;
+            font-family: Consolas, monospace;
+            overflow-y: auto;
+            height: 100%;
+            white-space: pre-wrap;
+            display: none;
+        }
+        #game-area {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+        }
+        #countdown {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            transition: all 0.1s ease;
+            height: 2.3rem;
+            line-height: 2.3rem;
+        }
+        #turn-indicator {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        #game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+        .cell {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+        .cell.next-to-remove {
+            animation: blink 3s infinite;
+        }
+        @keyframes blink {
+            0%, 50% {
+                box-shadow: inset 0 0 10px red;
+            }
+            25%, 75% {
+                box-shadow: none;
+            }
+        }
+        .cell.disabled {
+            cursor: not-allowed;
+        }
+        #reset-btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        #popup {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            text-align: center;
+            display: none;
+            z-index: 100;
+            width: 300px;
+            position: relative;
+        }
+        #popup-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        #popup-buttons button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 50;
+        }
+    </style>
+</head>
+<body>
+    <button id="dev-btn">Dev</button>
+    <div id="console"></div>
+    <div id="game-area">
+        <div id="countdown">5.00</div>
+        <div id="turn-indicator">あなたの番</div>
+        <div id="game-board">
+            <div class="cell" data-index="0"></div>
+            <div class="cell" data-index="1"></div>
+            <div class="cell" data-index="2"></div>
+            <div class="cell" data-index="3"></div>
+            <div class="cell" data-index="4"></div>
+            <div class="cell" data-index="5"></div>
+            <div class="cell" data-index="6"></div>
+            <div class="cell" data-index="7"></div>
+            <div class="cell" data-index="8"></div>
+        </div>
+        <button id="reset-btn">リセット</button>
+
+        <div id="popup">
+            <p id="popup-message"></p>
+            <div id="popup-buttons">
+                <button id="restart-btn">リスタート</button>
+                <button id="replay-btn">リプレイ</button>
+            </div>
+        </div>
+
+        <div id="overlay"></div>
+    </div>
+
+    <script>
+        const cells = document.querySelectorAll('.cell');
+        const resetBtn = document.getElementById('reset-btn');
+        const popup = document.getElementById('popup');
+        const overlay = document.getElementById('overlay');
+        const popupMessage = document.getElementById('popup-message');
+        const restartBtn = document.getElementById('restart-btn');
+        const replayBtn = document.getElementById('replay-btn');
+        const consoleElement = document.getElementById('console');
+        const devBtn = document.getElementById('dev-btn');
+        const turnIndicator = document.getElementById('turn-indicator');
+        const countdownElement = document.getElementById('countdown');
+
+        let playerHistory = [];
+        let computerHistory = [];
+        let isReplaying = false;
+        let replayTimeouts = [];
+        let countdownInterval;
+        let countdownValue = 5.0;
+        let isPlayerTurn = true;
+
+        const winningCombinations = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ];
+
+        devBtn.addEventListener('click', () => {
+            consoleElement.style.display = consoleElement.style.display === 'none' ? 'block' : 'none';
+        });
+
+        function logBoardState(prefix) {
+            let boardState = '';
+            cells.forEach((cell) => {
+                boardState += cell.textContent === '○' ? 'o' : cell.textContent === '×' ? 'x' : '-';
+            });
+            consoleElement.textContent += `${prefix} ${boardState}\n`;
+            consoleElement.scrollTop = consoleElement.scrollHeight;
+        }
+
+        function startCountdown() {
+            clearInterval(countdownInterval);
+            countdownValue = 5.0;
+            countdownElement.textContent = countdownValue.toFixed(2);
+            countdownElement.style.color = '';
+            countdownElement.style.fontWeight = '';
+            countdownElement.style.fontSize = '1.5rem';
+
+            countdownInterval = setInterval(() => {
+                countdownValue -= 0.01;
+                if (countdownValue < 0) countdownValue = 0;
+                countdownElement.textContent = countdownValue.toFixed(2);
+
+                if (countdownValue <= 2.5) {
+                    countdownElement.style.color = 'red';
+                    countdownElement.style.fontWeight = 'bold';
+                }
+
+                countdownElement.style.fontSize = `${1.5 + (5 - countdownValue) * 0.16}rem`;
+
+                if (countdownValue <= 0) {
+                    clearInterval(countdownInterval);
+                    if (isPlayerTurn) {
+                        showPopup('時間切れ！コンピューターの勝ち！');
+                    }
+                }
+            }, 10);
+        }
+
+        function checkWinner(marker) {
+            for (let combination of winningCombinations) {
+                if (combination.every(index => cells[index].textContent === marker)) {
+                    highlightWinningCombination(combination);
+                    clearInterval(countdownInterval);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function highlightWinningCombination(combination) {
+            combination.forEach(index => {
+                cells[index].style.backgroundColor = 'red';
+            });
+        }
+
+        function findWinningMove(marker) {
+            for (let combo of winningCombinations) {
+                const [a, b, c] = combo;
+                const values = [cells[a].textContent, cells[b].textContent, cells[c].textContent];
+                if (values.filter(v => v === marker).length === 2 && values.includes('')) {
+                    return [a, b, c].find(index => cells[index].textContent === '');
+                }
+            }
+            return null;
+        }
+
+        function findStrategicMove(marker) {
+            for (let combo of winningCombinations) {
+                const [a, b, c] = combo;
+                const values = [cells[a].textContent, cells[b].textContent, cells[c].textContent];
+                if (values.filter(v => v === marker).length === 2 && values.filter(v => v === '-').length === 1) {
+                    const emptyIndex = [a, b, c].find(index => cells[index].textContent === '-');
+                    if (playerHistory.includes(emptyIndex)) {
+                        return emptyIndex;
+                    }
+                }
+            }
+            return null;
+        }
+
+        function updateNextToRemoveMarkers() {
+            if (playerHistory.length < 3 && computerHistory.length < 3) {
+                return;
+            }
+
+            cells.forEach(cell => {
+                cell.classList.remove('next-to-remove');
+            });
+
+            if (playerHistory.length >= 3) {
+                const nextToRemovePlayerIndex = playerHistory[0];
+                cells[nextToRemovePlayerIndex].classList.add('next-to-remove');
+            }
+            if (computerHistory.length >= 3) {
+                const nextToRemoveComputerIndex = computerHistory[0];
+                cells[nextToRemoveComputerIndex].classList.add('next-to-remove');
+            }
+        }
+
+        function computerMove() {
+            let winningMove = findWinningMove('×');
+            if (winningMove !== null) {
+                placeMarker(cells[winningMove], '×');
+                return;
+            }
+
+            let strategicMove = findStrategicMove('×');
+            if (strategicMove !== null) {
+                placeMarker(cells[strategicMove], '×');
+                return;
+            }
+
+            let blockingMove = findWinningMove('○');
+            if (blockingMove !== null) {
+                placeMarker(cells[blockingMove], '×');
+                return;
+            }
+
+            if (cells[4].textContent === '') {
+                placeMarker(cells[4], '×');
+                return;
+            }
+
+            const emptyCells = Array.from(cells).filter(cell => cell.textContent === '');
+            if (emptyCells.length === 0) return;
+
+            const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+            placeMarker(randomCell, '×');
+        }
+
+        function placeMarker(cell, marker) {
+            if (marker === '○' && !isReplaying) {
+                if (playerHistory.length >= 3) {
+                    const oldIndex = playerHistory.shift();
+                    cells[oldIndex].textContent = '';
+                    cells[oldIndex].classList.remove('disabled');
+                }
+                playerHistory.push(cell.getAttribute('data-index'));
+                cell.textContent = marker;
+                cell.classList.add('disabled');
+                logBoardState('you:');
+                updateNextToRemoveMarkers();
+                turnIndicator.textContent = 'CPUの番';
+                isPlayerTurn = false;
+                startCountdown();
+
+                const randomDelay = Math.random() * 2000;
+                setTimeout(() => {
+                    if (!checkWinner('○')) {
+                        computerMove();
+                        turnIndicator.textContent = 'あなたの番';
+                        isPlayerTurn = true;
+                        startCountdown();
+                    }
+                }, randomDelay);
+            } else if (marker === '×' && !isReplaying) {
+                if (computerHistory.length >= 3) {
+                    const oldIndex = computerHistory.shift();
+                    cells[oldIndex].textContent = '';
+                    cells[oldIndex].classList.remove('disabled');
+                }
+                computerHistory.push(cell.getAttribute('data-index'));
+                cell.textContent = marker;
+                cell.classList.add('disabled');
+                logBoardState('cpu:');
+                updateNextToRemoveMarkers();
+            }
+
+            if (checkWinner(marker)) {
+                clearInterval(countdownInterval);
+                showPopup(marker === '○' ? 'あなたの勝ち！' : 'コンピューターの勝ち！');
+            }
+        }
+
+        function resetGame() {
+            clearInterval(countdownInterval);
+            replayTimeouts.forEach(timeout => clearTimeout(timeout));
+            replayTimeouts = [];
+            cells.forEach(cell => {
+                cell.textContent = '';
+                cell.style.backgroundColor = '';
+                cell.classList.remove('disabled');
+                cell.classList.remove('next-to-remove');
+            });
+            playerHistory = [];
+            computerHistory = [];
+            isReplaying = false;
+            turnIndicator.textContent = 'あなたの番';
+            isPlayerTurn = true;
+            startCountdown();
+            closePopup();
+            consoleElement.textContent = 'Game Start\n'; // コンソールをリセット
+        }
+
+        function showPopup(message) {
+            popupMessage.textContent = message;
+            popup.style.display = 'block';
+            overlay.style.display = 'block';
+        }
+
+        function closePopup() {
+            popup.style.display = 'none';
+            overlay.style.display = 'none';
+        }
+
+        function replayGame() {
+            resetGame();
+            isReplaying = true;
+
+            const logLines = consoleElement.textContent.trim().split('\n').filter(line => line.startsWith('you:') || line.startsWith('cpu:'));
+            let index = 0;
+
+            function nextMove() {
+                if (index < logLines.length) {
+                    const logLine = logLines[index];
+                    const boardState = logLine.split(' ')[1];
+
+                    cells.forEach((cell, i) => {
+                        if (boardState[i] === 'o') {
+                            cell.textContent = '○';
+                            cell.classList.add('disabled');
+                        } else if (boardState[i] === 'x') {
+                            cell.textContent = '×';
+                            cell.classList.add('disabled');
+                        } else {
+                            cell.textContent = '';
+                            cell.classList.remove('disabled');
+                        }
+                    });
+
+                    updateNextToRemoveMarkers();
+
+                    index++;
+                    replayTimeouts.push(setTimeout(nextMove, 1000));
+                } else {
+                    ['○', '×'].forEach(marker => {
+                        if (checkWinner(marker)) {
+                            setTimeout(() => {
+                                showPopup(marker === '○' ? 'あなたの勝ち！' : 'コンピューターの勝ち！');
+                            }, 1000);
+                        }
+                    });
+                }
+            }
+
+            nextMove();
+        }
+
+        cells.forEach(cell => {
+            cell.addEventListener('click', () => {
+                if (cell.textContent === '' && !isReplaying && overlay.style.display !== 'block' && isPlayerTurn) {
+                    placeMarker(cell, '○');
+                }
+            });
+        });
+
+        resetBtn.addEventListener('click', resetGame);
+        restartBtn.addEventListener('click', resetGame);
+        replayBtn.addEventListener('click', replayGame);
+
+        consoleElement.textContent = 'Game Start\n';
+        startCountdown();
+    </script>
+</body>
+</html>

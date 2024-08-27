@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>PowerShell コマンドジェネレーター</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        select, input, button { margin-top: 10px; }
+        .command-output { margin-top: 20px; padding: 10px; background-color: #f0f0f0; }
+    </style>
+</head>
+<body>
+    <h1>PowerShell コマンドジェネレーター</h1>
+    <select id="command-select">
+        <option value="">コマンドを選択してください</option>
+        <!-- Connect-ExchangeOnline コマンド -->
+        <option value="connect-exchange">Connect-ExchangeOnline - Exchange Onlineへの接続</option>
+        <option value="disconnect-exchange">Disconnect-ExchangeOnline - Exchange Onlineからの接続を切断</option>
+        <option value="get-mailbox">Get-Mailbox - メールボックスの情報を取得</option>
+        <option value="set-mailbox">Set-Mailbox - メールボックスのプロパティを設定</option>
+        <option value="new-mailbox">New-Mailbox - 新しいメールボックスを作成</option>
+        <option value="remove-mailbox">Remove-Mailbox - メールボックスを削除</option>
+        <option value="get-transportrule">Get-TransportRule - トランスポートルールを表示</option>
+        <option value="new-transportrule">New-TransportRule - 新しいトランスポートルールを作成</option>
+        <option value="set-transportrule">Set-TransportRule - トランスポートルールを変更</option>
+        <option value="get-distributiongroup">Get-DistributionGroup - 配布リストを取得</option>
+        <option value="new-distributiongroup">New-DistributionGroup - 新しい配布リストを作成</option>
+        <option value="set-distributiongroup">Set-DistributionGroup - 配布リストの設定を変更</option>
+        <!-- Connect-MgGraph コマンド -->
+        <option value="connect-mggraph">Connect-MgGraph - Microsoft Graphに接続</option>
+        <option value="disconnect-mggraph">Disconnect-MgGraph - Microsoft Graphから切断</option>
+        <option value="get-mguser">Get-MgUser - ユーザー情報を取得</option>
+        <option value="new-mguser">New-MgUser - 新しいユーザーを作成</option>
+        <option value="update-mguser">Update-MgUser - ユーザー情報を更新</option>
+        <option value="remove-mguser">Remove-MgUser - ユーザーを削除</option>
+        <option value="get-mggroup">Get-MgGroup - グループ情報を取得</option>
+        <option value="new-mggroup">New-MgGroup - 新しいグループを作成</option>
+        <option value="update-mggroup">Update-MgGroup - グループ情報を更新</option>
+        <option value="remove-mggroup">Remove-MgGroup - グループを削除</option>
+        <option value="get-mgusermessage">Get-MgUserMessage - ユーザーのメールメッセージを取得</option>
+        <option value="send-mgusermail">Send-MgUserMail - ユーザーのメールを送信</option>
+    </select>
+    <input type="text" id="user-id" placeholder="ユーザーIDまたはメールアドレス" />
+    <button onclick="generateCommand()">コマンド生成</button>
+    <div id="command-output" class="command-output"></div>
+
+    <script>
+        function generateCommand() {
+            const commandType = document.getElementById('command-select').value;
+            const userId = document.getElementById('user-id').value.trim();
+            let commandString = '';
+
+            if (!commandType) {
+                document.getElementById('command-output').innerText = 'コマンドを選択してください。';
+                return;
+            }
+            if (!userId && commandType !== 'connect-exchange' && commandType !== 'disconnect-exchange' &&
+                commandType !== 'connect-mggraph' && commandType !== 'disconnect-mggraph') {
+                document.getElementById('command-output').innerText = 'ユーザーIDまたはメールアドレスを入力してください。';
+                return;
+            }
+
+            switch (commandType) {
+                case 'connect-exchange':
+                    commandString = `Connect-ExchangeOnline`;
+                    break;
+                case 'disconnect-exchange':
+                    commandString = `Disconnect-ExchangeOnline`;
+                    break;
+                case 'get-mailbox':
+                    commandString = `Get-Mailbox -Identity "${userId}"`;
+                    break;
+                case 'set-mailbox':
+                    commandString = `Set-Mailbox -Identity "${userId}" -Properties <properties>`;
+                    break;
+                case 'new-mailbox':
+                    commandString = `New-Mailbox -UserPrincipalName "${userId}" -OtherOptions`;
+                    break;
+                case 'remove-mailbox':
+                    commandString = `Remove-Mailbox -Identity "${userId}" -Confirm:$false`;
+                    break;
+                case 'get-transportrule':
+                    commandString = `Get-TransportRule`;
+                    break;
+                case 'new-transportrule':
+                    commandString = `New-TransportRule -Name "New Rule" -OtherOptions`;
+                    break;
+                case 'set-transportrule':
+                    commandString = `Set-TransportRule -Identity "Rule Name" -OtherOptions`;
+                    break;
+                case 'get-distributiongroup':
+                    commandString = `Get-DistributionGroup -Identity "${userId}"`;
+                    break;
+                case 'new-distributiongroup':
+                    commandString = `New-DistributionGroup -Name "${userId}"`;
+                    break;
+                case 'set-distributiongroup':
+                    commandString = `Set-DistributionGroup -Identity "${userId}" -OtherOptions`;
+                    break;
+                case 'connect-mggraph':
+                    commandString = `Connect-MgGraph`;
+                    break;
+                case 'disconnect-mggraph':
+                    commandString = `Disconnect-MgGraph`;
+                    break;
+                case 'get-mguser':
+                    commandString = `Get-MgUser -UserId "${userId}"`;
+                    break;
+                case 'new-mguser':
+                    commandString = `New-MgUser -UserId "${userId}" -OtherParams`;
+                    break;
+                case 'update-mguser':
+                    commandString = `Update-MgUser -UserId "${userId}" -OtherParams`;
+                    break;
+                case 'remove-mguser':
+                    commandString = `Remove-MgUser -UserId "${userId}" -Confirm:$false`;
+                    break;
+                case 'get-mggroup':
+                    commandString = `Get-MgGroup -GroupId "${userId}"`;
+                    break;
+                case 'new-mggroup':
+                    commandString = `New-MgGroup -DisplayName "${userId}" -OtherOptions`;
+                    break;
+                case 'update-mggroup':
+                    commandString = `Update-MgGroup -GroupId "${userId}" -OtherParams`;
+                    break;
+                case 'remove-mggroup':
+                    commandString = `Remove-MgGroup -GroupId "${userId}" -Confirm:$false`;
+                    break;
+                case 'get-mgusermessage':
+                    commandString = `Get-MgUserMessage -UserId "${userId}"`;
+                    break;
+                case 'send-mgusermail':
+                    commandString = `Send-MgUserMail -UserId "${userId}" -MessageSubject "Subject" -MessageBody "Body"`;
+                    break;
+                default:
+                    commandString = '不明なコマンドです。';
+                    break;
+            }
+            document.getElementById('command-output').innerText = commandString;
+        }
+    </script>
+</body>
+</html>

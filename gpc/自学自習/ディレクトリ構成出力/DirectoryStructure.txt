@@ -1,0 +1,533 @@
+﻿+---images 4.91 MB
+|   +---patterns 0.01 MB
+|   |   |---bricks.png 0 MB
+|   |   |---checkerboard.png 0 MB
+|   |   |---circles.png 0 MB
+|   |   |---crosshatch.png 0 MB
+|   |   |---crosshatch30.png 0 MB
+|   |   |---crosshatch45.png 0 MB
+|   |   |---fishscales.png 0 MB
+|   |   |---gray0.png 0 MB
+|   |   |---gray10.png 0 MB
+|   |   |---gray100.png 0 MB
+|   |   |---gray15.png 0 MB
+|   |   |---gray20.png 0 MB
+|   |   |---gray25.png 0 MB
+|   |   |---gray30.png 0 MB
+|   |   |---gray35.png 0 MB
+|   |   |---gray40.png 0 MB
+|   |   |---gray45.png 0 MB
+|   |   |---gray5.png 0 MB
+|   |   |---gray50.png 0 MB
+|   |   |---gray55.png 0 MB
+|   |   |---gray60.png 0 MB
+|   |   |---gray65.png 0 MB
+|   |   |---gray70.png 0 MB
+|   |   |---gray75.png 0 MB
+|   |   |---gray80.png 0 MB
+|   |   |---gray85.png 0 MB
+|   |   |---gray90.png 0 MB
+|   |   |---gray95.png 0 MB
+|   |   |---hexagons.png 0 MB
+|   |   |---horizontal.png 0 MB
+|   |   |---horizontal2.png 0 MB
+|   |   |---horizontal3.png 0 MB
+|   |   |---horizontalsaw.png 0 MB
+|   |   |---hs_bdiagonal.png 0 MB
+|   |   |---hs_cross.png 0 MB
+|   |   |---hs_diagcross.png 0 MB
+|   |   |---hs_fdiagonal.png 0 MB
+|   |   |---hs_horizontal.png 0 MB
+|   |   |---hs_vertical.png 0 MB
+|   |   |---left30.png 0 MB
+|   |   |---left45.png 0 MB
+|   |   |---leftshingle.png 0 MB
+|   |   |---octagons.png 0 MB
+|   |   |---right30.png 0 MB
+|   |   |---right45.png 0 MB
+|   |   |---rightshingle.png 0 MB
+|   |   |---smallfishscales.png 0 MB
+|   |   |---vertical.png 0 MB
+|   |   |---vertical2.png 0 MB
+|   |   |---vertical3.png 0 MB
+|   |   |---verticalbricks.png 0 MB
+|   |   |---verticalleftshingle.png 0 MB
+|   |   |---verticalrightshingle.png 0 MB
+|   |   |---verticalsaw.png 0 MB
+|   |---affine.png 0 MB
+|   |---annotate.png 0 MB
+|   |---arc.png 0 MB
+|   |---atop.gif 0 MB
+|   |---background.jpg 0 MB
+|   |---black.png 0 MB
+|   |---bluebells_clipped.jpg 0.02 MB
+|   |---bluebells_darker.jpg 0.03 MB
+|   |---bluebells_lin.jpg 0.03 MB
+|   |---bluebells_log.jpg 0.02 MB
+|   |---button.gif 0 MB
+|   |---color-thresholding-gray.gif 0.01 MB
+|   |---color-thresholding-hsv-rgb.gif 0 MB
+|   |---color-thresholding-hsv.gif 0 MB
+|   |---color-thresholding-rgb.gif 0 MB
+|   |---color-thresholding.gif 0 MB
+|   |---color-thresholding.jpg 0.02 MB
+|   |---configure.jpg 0.15 MB
+|   |---convex-hull-barn-closure.jpg 0.07 MB
+|   |---convex-hull-barn.jpg 0.07 MB
+|   |---convex-hull-blocks-closure.png 0.01 MB
+|   |---convex-hull-blocks.png 0.01 MB
+|   |---convex-hull.png 0.01 MB
+|   |---cylinder_shaded.png 0.09 MB
+|   |---difference.png 0.01 MB
+|   |---examples.jpg 1.27 MB
+|   |---frame.jpg 0.01 MB
+|   |---fuzzy-magick.png 0.06 MB
+|   |---gaussian-blur.png 0 MB
+|   |---granite.png 0.01 MB
+|   |---imade_art2.jpg 0 MB
+|   |---ImageMagick.ico 0.02 MB
+|   |---label.gif 0 MB
+|   |---logo-sm-flop.png 0.01 MB
+|   |---logo-sm-fx.png 0.01 MB
+|   |---logo-sm.png 0.01 MB
+|   |---logo.jpg 0.02 MB
+|   |---logo.png 0.38 MB
+|   |---montage.jpg 0 MB
+|   |---mountains-clahe.jpg 0.31 MB
+|   |---mountains-equalize.jpg 0.24 MB
+|   |---mountains.jpg 0.21 MB
+|   |---navy.png 0 MB
+|   |---objects.gif 0 MB
+|   |---objects.jpg 0 MB
+|   |---objects.png 0 MB
+|   |---over.gif 0 MB
+|   |---piechart.png 0.05 MB
+|   |---radial-gradient.png 0.01 MB
+|   |---reconstruct.jpg 0 MB
+|   |---red-ball.png 0.01 MB
+|   |---red-circle.png 0 MB
+|   |---right.gif 0 MB
+|   |---rose-over.png 0.01 MB
+|   |---rose-sigmoidal.png 0.02 MB
+|   |---rose.jpg 0 MB
+|   |---rose.png 0.01 MB
+|   |---script.png 0.01 MB
+|   |---smile.gif 0 MB
+|   |---sponsor.jpg 0 MB
+|   |---sprite.jpg 0.01 MB
+|   |---t-shirt.png 0.25 MB
+|   |---wand.ico 0.02 MB
+|   |---wand.png 0 MB
+|   |---white-highlight.png 0 MB
+|   |---wizard.jpg 0.06 MB
+|   |---wizard.png 1.3 MB
++---modules 5.61 MB
+|   +---coders 5.58 MB
+|   |   |---IM_MOD_RL_aai_.dll 0.03 MB
+|   |   |---IM_MOD_RL_art_.dll 0.03 MB
+|   |   |---IM_MOD_RL_ashlar_.dll 0.03 MB
+|   |   |---IM_MOD_RL_avs_.dll 0.03 MB
+|   |   |---IM_MOD_RL_bayer_.dll 0.03 MB
+|   |   |---IM_MOD_RL_bgr_.dll 0.04 MB
+|   |   |---IM_MOD_RL_bmp_.dll 0.05 MB
+|   |   |---IM_MOD_RL_braille_.dll 0.03 MB
+|   |   |---IM_MOD_RL_cals_.dll 0.03 MB
+|   |   |---IM_MOD_RL_caption_.dll 0.03 MB
+|   |   |---IM_MOD_RL_cin_.dll 0.04 MB
+|   |   |---IM_MOD_RL_cip_.dll 0.03 MB
+|   |   |---IM_MOD_RL_clipboard_.dll 0.03 MB
+|   |   |---IM_MOD_RL_clip_.dll 0.03 MB
+|   |   |---IM_MOD_RL_cmyk_.dll 0.04 MB
+|   |   |---IM_MOD_RL_cube_.dll 0.03 MB
+|   |   |---IM_MOD_RL_cut_.dll 0.04 MB
+|   |   |---IM_MOD_RL_dcm_.dll 0.17 MB
+|   |   |---IM_MOD_RL_dds_.dll 0.07 MB
+|   |   |---IM_MOD_RL_debug_.dll 0.03 MB
+|   |   |---IM_MOD_RL_dib_.dll 0.04 MB
+|   |   |---IM_MOD_RL_djvu_.dll 0.03 MB
+|   |   |---IM_MOD_RL_dmr_.dll 0.03 MB
+|   |   |---IM_MOD_RL_dng_.dll 0.04 MB
+|   |   |---IM_MOD_RL_dot_.dll 0.03 MB
+|   |   |---IM_MOD_RL_dps_.dll 0.03 MB
+|   |   |---IM_MOD_RL_dpx_.dll 0.05 MB
+|   |   |---IM_MOD_RL_emf_.dll 0.03 MB
+|   |   |---IM_MOD_RL_ept_.dll 0.03 MB
+|   |   |---IM_MOD_RL_exr_.dll 0.04 MB
+|   |   |---IM_MOD_RL_farbfeld_.dll 0.03 MB
+|   |   |---IM_MOD_RL_fax_.dll 0.03 MB
+|   |   |---IM_MOD_RL_fits_.dll 0.04 MB
+|   |   |---IM_MOD_RL_fl32_.dll 0.03 MB
+|   |   |---IM_MOD_RL_flif_.dll 0.03 MB
+|   |   |---IM_MOD_RL_fpx_.dll 0.03 MB
+|   |   |---IM_MOD_RL_ftxt_.dll 0.04 MB
+|   |   |---IM_MOD_RL_gif_.dll 0.05 MB
+|   |   |---IM_MOD_RL_gradient_.dll 0.03 MB
+|   |   |---IM_MOD_RL_gray_.dll 0.04 MB
+|   |   |---IM_MOD_RL_hald_.dll 0.03 MB
+|   |   |---IM_MOD_RL_hdr_.dll 0.04 MB
+|   |   |---IM_MOD_RL_heic_.dll 0.04 MB
+|   |   |---IM_MOD_RL_histogram_.dll 0.03 MB
+|   |   |---IM_MOD_RL_hrz_.dll 0.03 MB
+|   |   |---IM_MOD_RL_html_.dll 0.03 MB
+|   |   |---IM_MOD_RL_icon_.dll 0.04 MB
+|   |   |---IM_MOD_RL_info_.dll 0.03 MB
+|   |   |---IM_MOD_RL_inline_.dll 0.03 MB
+|   |   |---IM_MOD_RL_ipl_.dll 0.03 MB
+|   |   |---IM_MOD_RL_jbig_.dll 0.03 MB
+|   |   |---IM_MOD_RL_jnx_.dll 0.03 MB
+|   |   |---IM_MOD_RL_jp2_.dll 0.04 MB
+|   |   |---IM_MOD_RL_jpeg_.dll 0.06 MB
+|   |   |---IM_MOD_RL_json_.dll 0.06 MB
+|   |   |---IM_MOD_RL_jxl_.dll 0.04 MB
+|   |   |---IM_MOD_RL_kernel_.dll 0.03 MB
+|   |   |---IM_MOD_RL_label_.dll 0.03 MB
+|   |   |---IM_MOD_RL_mac_.dll 0.03 MB
+|   |   |---IM_MOD_RL_magick_.dll 0.22 MB
+|   |   |---IM_MOD_RL_map_.dll 0.03 MB
+|   |   |---IM_MOD_RL_mask_.dll 0.03 MB
+|   |   |---IM_MOD_RL_matte_.dll 0.03 MB
+|   |   |---IM_MOD_RL_mat_.dll 0.05 MB
+|   |   |---IM_MOD_RL_meta_.dll 0.05 MB
+|   |   |---IM_MOD_RL_miff_.dll 0.06 MB
+|   |   |---IM_MOD_RL_mono_.dll 0.03 MB
+|   |   |---IM_MOD_RL_mpc_.dll 0.04 MB
+|   |   |---IM_MOD_RL_mpr_.dll 0.03 MB
+|   |   |---IM_MOD_RL_msl_.dll 0.1 MB
+|   |   |---IM_MOD_RL_mtv_.dll 0.03 MB
+|   |   |---IM_MOD_RL_mvg_.dll 0.03 MB
+|   |   |---IM_MOD_RL_null_.dll 0.03 MB
+|   |   |---IM_MOD_RL_ora_.dll 0.03 MB
+|   |   |---IM_MOD_RL_otb_.dll 0.03 MB
+|   |   |---IM_MOD_RL_palm_.dll 0.04 MB
+|   |   |---IM_MOD_RL_pango_.dll 0.04 MB
+|   |   |---IM_MOD_RL_pattern_.dll 0.03 MB
+|   |   |---IM_MOD_RL_pcd_.dll 0.04 MB
+|   |   |---IM_MOD_RL_pcl_.dll 0.04 MB
+|   |   |---IM_MOD_RL_pcx_.dll 0.04 MB
+|   |   |---IM_MOD_RL_pdb_.dll 0.04 MB
+|   |   |---IM_MOD_RL_pdf_.dll 0.07 MB
+|   |   |---IM_MOD_RL_pes_.dll 0.03 MB
+|   |   |---IM_MOD_RL_pgx_.dll 0.03 MB
+|   |   |---IM_MOD_RL_pict_.dll 0.05 MB
+|   |   |---IM_MOD_RL_pix_.dll 0.03 MB
+|   |   |---IM_MOD_RL_plasma_.dll 0.03 MB
+|   |   |---IM_MOD_RL_png_.dll 0.17 MB
+|   |   |---IM_MOD_RL_pnm_.dll 0.06 MB
+|   |   |---IM_MOD_RL_ps2_.dll 0.04 MB
+|   |   |---IM_MOD_RL_ps3_.dll 0.05 MB
+|   |   |---IM_MOD_RL_psd_.dll 0.07 MB
+|   |   |---IM_MOD_RL_ps_.dll 0.06 MB
+|   |   |---IM_MOD_RL_pwp_.dll 0.03 MB
+|   |   |---IM_MOD_RL_qoi_.dll 0.03 MB
+|   |   |---IM_MOD_RL_raw_.dll 0.03 MB
+|   |   |---IM_MOD_RL_rgb_.dll 0.04 MB
+|   |   |---IM_MOD_RL_rgf_.dll 0.03 MB
+|   |   |---IM_MOD_RL_rla_.dll 0.03 MB
+|   |   |---IM_MOD_RL_rle_.dll 0.04 MB
+|   |   |---IM_MOD_RL_screenshot_.dll 0.03 MB
+|   |   |---IM_MOD_RL_scr_.dll 0.03 MB
+|   |   |---IM_MOD_RL_sct_.dll 0.03 MB
+|   |   |---IM_MOD_RL_sfw_.dll 0.03 MB
+|   |   |---IM_MOD_RL_sgi_.dll 0.04 MB
+|   |   |---IM_MOD_RL_sixel_.dll 0.04 MB
+|   |   |---IM_MOD_RL_stegano_.dll 0.03 MB
+|   |   |---IM_MOD_RL_strimg_.dll 0.03 MB
+|   |   |---IM_MOD_RL_sun_.dll 0.04 MB
+|   |   |---IM_MOD_RL_svg_.dll 0.09 MB
+|   |   |---IM_MOD_RL_tga_.dll 0.04 MB
+|   |   |---IM_MOD_RL_thumbnail_.dll 0.03 MB
+|   |   |---IM_MOD_RL_tiff_.dll 0.07 MB
+|   |   |---IM_MOD_RL_tile_.dll 0.03 MB
+|   |   |---IM_MOD_RL_tim2_.dll 0.03 MB
+|   |   |---IM_MOD_RL_tim_.dll 0.03 MB
+|   |   |---IM_MOD_RL_ttf_.dll 0.03 MB
+|   |   |---IM_MOD_RL_txt_.dll 0.04 MB
+|   |   |---IM_MOD_RL_uhdr_.dll 0.03 MB
+|   |   |---IM_MOD_RL_uil_.dll 0.03 MB
+|   |   |---IM_MOD_RL_url_.dll 0.03 MB
+|   |   |---IM_MOD_RL_uyvy_.dll 0.03 MB
+|   |   |---IM_MOD_RL_vicar_.dll 0.03 MB
+|   |   |---IM_MOD_RL_video_.dll 0.04 MB
+|   |   |---IM_MOD_RL_vid_.dll 0.03 MB
+|   |   |---IM_MOD_RL_viff_.dll 0.04 MB
+|   |   |---IM_MOD_RL_vips_.dll 0.04 MB
+|   |   |---IM_MOD_RL_wbmp_.dll 0.03 MB
+|   |   |---IM_MOD_RL_webp_.dll 0.04 MB
+|   |   |---IM_MOD_RL_wpg_.dll 0.05 MB
+|   |   |---IM_MOD_RL_xbm_.dll 0.03 MB
+|   |   |---IM_MOD_RL_xcf_.dll 0.04 MB
+|   |   |---IM_MOD_RL_xc_.dll 0.03 MB
+|   |   |---IM_MOD_RL_xpm_.dll 0.04 MB
+|   |   |---IM_MOD_RL_xps_.dll 0.03 MB
+|   |   |---IM_MOD_RL_yaml_.dll 0.06 MB
+|   |   |---IM_MOD_RL_ycbcr_.dll 0.04 MB
+|   |   |---IM_MOD_RL_yuv_.dll 0.04 MB
+|   +---filters 0.03 MB
+|   |   |---FILTER_analyze_.dll 0.03 MB
++---uninstall 0.12 MB
+|   |---PathTool.exe 0.12 MB
++---www 6.4 MB
+|   +---api 1.84 MB
+|   |   |---animate.html 0.01 MB
+|   |   |---annotate.html 0.02 MB
+|   |   |---attribute.html 0.02 MB
+|   |   |---blob.html 0.02 MB
+|   |   |---cache-view.html 0.03 MB
+|   |   |---cache.html 0.03 MB
+|   |   |---channel.html 0.02 MB
+|   |   |---cipher.html 0.02 MB
+|   |   |---color.html 0.02 MB
+|   |   |---colormap.html 0.01 MB
+|   |   |---colorspace.html 0.02 MB
+|   |   |---compare.html 0.01 MB
+|   |   |---composite.html 0.01 MB
+|   |   |---constitute.html 0.02 MB
+|   |   |---decorate.html 0.02 MB
+|   |   |---deprecate.html 0.01 MB
+|   |   |---display.html 0.01 MB
+|   |   |---distort.html 0.02 MB
+|   |   |---draw.html 0.02 MB
+|   |   |---drawing-wand.html 0.12 MB
+|   |   |---effect.html 0.03 MB
+|   |   |---enhance.html 0.04 MB
+|   |   |---exception.html 0.02 MB
+|   |   |---feature.html 0.02 MB
+|   |   |---fourier.html 0.02 MB
+|   |   |---fx.html 0.02 MB
+|   |   |---histogram.html 0.02 MB
+|   |   |---Image++.html 0.14 MB
+|   |   |---image-view.html 0.03 MB
+|   |   |---image.html 0.04 MB
+|   |   |---layer.html 0.02 MB
+|   |   |---list.html 0.03 MB
+|   |   |---magick++-classes.html 0.01 MB
+|   |   |---magick-deprecate.html 0.01 MB
+|   |   |---magick-image.html 0.27 MB
+|   |   |---magick-property.html 0.06 MB
+|   |   |---magick-wand.html 0.03 MB
+|   |   |---magick.html 0.02 MB
+|   |   |---memory.html 0.03 MB
+|   |   |---mime.html 0.02 MB
+|   |   |---module.html 0.02 MB
+|   |   |---mogrify.html 0.01 MB
+|   |   |---monitor.html 0.02 MB
+|   |   |---montage.html 0.01 MB
+|   |   |---morphology.html 0.04 MB
+|   |   |---paint.html 0.02 MB
+|   |   |---pixel-iterator.html 0.02 MB
+|   |   |---pixel-wand.html 0.05 MB
+|   |   |---profile.html 0.02 MB
+|   |   |---property.html 0.02 MB
+|   |   |---quantize.html 0.03 MB
+|   |   |---registry.html 0.02 MB
+|   |   |---resize.html 0.02 MB
+|   |   |---resource.html 0.02 MB
+|   |   |---segment.html 0.01 MB
+|   |   |---shear.html 0.02 MB
+|   |   |---signature.html 0.01 MB
+|   |   |---statistic.html 0.02 MB
+|   |   |---stream.html 0.01 MB
+|   |   |---transform.html 0.03 MB
+|   |   |---version.html 0.01 MB
+|   |   |---vision.html 0.01 MB
+|   |   |---wand-view.html 0.03 MB
+|   +---assets 0.3 MB
+|   |   |---color-modes.js 0 MB
+|   |   |---magick.css 0.22 MB
+|   |   |---magick.js 0.08 MB
+|   +---Magick++ 1.04 MB
+|   |   |---Blob.html 0.01 MB
+|   |   |---Cache.png 0 MB
+|   |   |---ChangeLog.html 0 MB
+|   |   |---CoderInfo.html 0 MB
+|   |   |---Color.html 0.01 MB
+|   |   |---Copyright.txt 0 MB
+|   |   |---Documentation.html 0.01 MB
+|   |   |---Drawable.html 0.05 MB
+|   |   |---Drawable_example_1.png 0 MB
+|   |   |---Enumerations.html 0.06 MB
+|   |   |---Exception.html 0.01 MB
+|   |   |---FormatCharacters.html 0 MB
+|   |   |---Future.html 0 MB
+|   |   |---Geometry.html 0.02 MB
+|   |   |---Image++.html 0.22 MB
+|   |   |---Image.html 0.14 MB
+|   |   |---Image.png 0.02 MB
+|   |   |---ImageDesign.html 0 MB
+|   |   |---ImageMagick.png 0.29 MB
+|   |   |---index.html 0.01 MB
+|   |   |---Install.html 0.01 MB
+|   |   |---Magick++.png 0.01 MB
+|   |   |---montage-sample-framed.jpg 0.02 MB
+|   |   |---Montage.html 0.01 MB
+|   |   |---NEWS.html 0 MB
+|   |   |---PixelPacket.html 0 MB
+|   |   |---Pixels.html 0.01 MB
+|   |   |---Quantum.html 0 MB
+|   |   |---README.txt 0 MB
+|   |   |---right_triangle.png 0 MB
+|   |   |---STL.html 0.08 MB
+|   |   |---thumbnail-anatomy-framed.jpg 0.01 MB
+|   |   |---thumbnail-anatomy-plain.jpg 0.01 MB
+|   |   |---thumbnail-sample-framed.jpg 0.01 MB
+|   |   |---thumbnail-sample-plain.jpg 0.01 MB
+|   |   |---TypeMetric.html 0 MB
+|   +---source 0.39 MB
+|   |   |---analyze.c 0.01 MB
+|   |   |---coder.xml 0 MB
+|   |   |---colors.xml 0 MB
+|   |   |---configure.xml 0 MB
+|   |   |---contrast.c 0 MB
+|   |   |---core.c 0 MB
+|   |   |---delegates.xml 0.01 MB
+|   |   |---english.xml 0.05 MB
+|   |   |---examples.pl 0.01 MB
+|   |   |---francais.xml 0.05 MB
+|   |   |---incantation.msl 0 MB
+|   |   |---locale.xml 0 MB
+|   |   |---log.xml 0 MB
+|   |   |---magic.xml 0 MB
+|   |   |---mgk.c 0.02 MB
+|   |   |---mime.xml 0.13 MB
+|   |   |---piechart.mvg 0 MB
+|   |   |---piechart.svg 0 MB
+|   |   |---policy.xml 0 MB
+|   |   |---quantization-table.xml 0 MB
+|   |   |---thresholds.xml 0.01 MB
+|   |   |---type-apple.xml 0.03 MB
+|   |   |---type-dejavu.xml 0.01 MB
+|   |   |---type-ghostscript.xml 0.01 MB
+|   |   |---type-urw-base35.xml 0.01 MB
+|   |   |---type-windows.xml 0.02 MB
+|   |   |---type.xml 0 MB
+|   |   |---wand.c 0 MB
+|   |---advanced-linux-installation.html 0.05 MB
+|   |---advanced-unix-installation.html 0.04 MB
+|   |---advanced-windows-installation.html 0.01 MB
+|   |---animate.html 0.03 MB
+|   |---architecture.html 0.1 MB
+|   |---changelog.html 0.15 MB
+|   |---cipher.html 0.02 MB
+|   |---cite.html 0.01 MB
+|   |---clahe.html 0.02 MB
+|   |---color-management.html 0.02 MB
+|   |---color-thresholding.html 0.02 MB
+|   |---color.html 0.17 MB
+|   |---command-line-options.html 0.4 MB
+|   |---command-line-processing.html 0.07 MB
+|   |---command-line-tools.html 0.02 MB
+|   |---compare.html 0.02 MB
+|   |---compose.html 0.04 MB
+|   |---composite.html 0.03 MB
+|   |---conjure.html 0.05 MB
+|   |---connected-components.html 0.02 MB
+|   |---contact.html 0.01 MB
+|   |---convert.html 0.05 MB
+|   |---convex-hull.html 0.02 MB
+|   |---defines.html 0.07 MB
+|   |---develop.html 0.02 MB
+|   |---display.html 0.03 MB
+|   |---distribute-pixel-cache.html 0.01 MB
+|   |---download.html 0.03 MB
+|   |---escape.html 0.04 MB
+|   |---examples.html 0.01 MB
+|   |---exception.html 0.02 MB
+|   |---export.html 0.01 MB
+|   |---favicon.ico 0.09 MB
+|   |---formats.html 0.09 MB
+|   |---fx.html 0.04 MB
+|   |---gradient.html 0.02 MB
+|   |---high-dynamic-range.html 0.01 MB
+|   |---history.html 0.02 MB
+|   |---identify.html 0.02 MB
+|   |---import.html 0.02 MB
+|   |---index.html 0.02 MB
+|   |---install-source.html 0.02 MB
+|   |---jp2.html 0.01 MB
+|   |---license.html 0.02 MB
+|   |---links.html 0.02 MB
+|   |---magick++.html 0.02 MB
+|   |---magick-cache.html 0.02 MB
+|   |---magick-core.html 0.02 MB
+|   |---magick-script.html 0.05 MB
+|   |---magick-vector-graphics.html 0.04 MB
+|   |---magick-wand.html 0.02 MB
+|   |---magick.html 0.05 MB
+|   |---miff.html 0.02 MB
+|   |---mirror.html 0.02 MB
+|   |---mogrify.html 0.05 MB
+|   |---montage.html 0.03 MB
+|   |---motion-picture.html 0.02 MB
+|   |---multispectral-imagery.html 0.02 MB
+|   |---news.html 0.02 MB
+|   |---opencl.html 0.02 MB
+|   |---openmp.html 0.01 MB
+|   |---perl-magick.html 0.11 MB
+|   |---porting.html 0.05 MB
+|   |---privacy-policy.html 0.01 MB
+|   |---quantize.html 0.02 MB
+|   |---resources.html 0.03 MB
+|   |---search.html 0.01 MB
+|   |---security-policy.html 0.04 MB
+|   |---sitemap.html 0.03 MB
+|   |---stream.html 0.02 MB
+|   |---support.html 0.02 MB
+|   |---vpat.html 0.01 MB
+|   |---webp.html 0.02 MB
+|---ChangeLog.md 0.5 MB
+|---colors.xml 0 MB
+|---configure.xml 0 MB
+|---CORE_RL_brotli_.dll 0.79 MB
+|---CORE_RL_bzlib_.dll 0.09 MB
+|---CORE_RL_cairo_.dll 1.25 MB
+|---CORE_RL_exr_.dll 5.47 MB
+|---CORE_RL_flif_.dll 1.13 MB
+|---CORE_RL_freetype_.dll 0.65 MB
+|---CORE_RL_fribidi_.dll 0.13 MB
+|---CORE_RL_glib_.dll 2.53 MB
+|---CORE_RL_harfbuzz_.dll 1.06 MB
+|---CORE_RL_heif_.dll 4.53 MB
+|---CORE_RL_jpeg-turbo_.dll 0.66 MB
+|---CORE_RL_jpeg-xl_.dll 2.47 MB
+|---CORE_RL_lcms_.dll 0.37 MB
+|---CORE_RL_lqr_.dll 0.07 MB
+|---CORE_RL_lzma_.dll 0.19 MB
+|---CORE_RL_Magick++_.dll 0.49 MB
+|---CORE_RL_MagickCore_.dll 2.01 MB
+|---CORE_RL_MagickWand_.dll 1.28 MB
+|---CORE_RL_openjpeg_.dll 0.37 MB
+|---CORE_RL_pango_.dll 0.35 MB
+|---CORE_RL_png_.dll 0.21 MB
+|---CORE_RL_raw_.dll 1.1 MB
+|---CORE_RL_rsvg_.dll 0.52 MB
+|---CORE_RL_tiff_.dll 0.44 MB
+|---CORE_RL_webp_.dll 0.54 MB
+|---CORE_RL_xml_.dll 0.34 MB
+|---CORE_RL_zip_.dll 0.12 MB
+|---CORE_RL_zlib_.dll 0.1 MB
+|---delegates.xml 0.01 MB
+|---english.xml 0.05 MB
+|---ImageMagick.ico 0.02 MB
+|---index.html 0.02 MB
+|---License.txt 0.01 MB
+|---locale.xml 0 MB
+|---log.xml 0 MB
+|---magick.exe 0.05 MB
+|---mfc140u.dll 5.4 MB
+|---msvcp140.dll 0.55 MB
+|---msvcp140_1.dll 0.03 MB
+|---msvcp140_2.dll 0.26 MB
+|---msvcp140_atomic_wait.dll 0.05 MB
+|---msvcp140_codecvt_ids.dll 0.03 MB
+|---NOTICE.txt 0.35 MB
+|---policy.xml 0.01 MB
+|---sRGB.icc 0.06 MB
+|---thresholds.xml 0.01 MB
+|---type-ghostscript.xml 0.01 MB
+|---type.xml 0 MB
+|---unins000.dat 0.1 MB
+|---unins000.exe 3.07 MB
+|---vcomp140.dll 0.18 MB
+|---vcruntime140.dll 0.11 MB
+|---vcruntime140_1.dll 0.05 MB
+|---vcruntime140_threads.dll 0.04 MB

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PowerShell エイリアス検索</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    #result { margin-top: 20px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>PowerShell エイリアス検索</h1>
+  <p>PowerShellコマンドを入力すると、そのエイリアスを検索します。</p>
+  <input type="text" id="command" placeholder="例: Get-ChildItem">
+  <button onclick="findAlias()">検索</button>
+  <div id="result"></div>
+
+  <script>
+    let powershellAliases = [];
+
+    // JSONファイルを読み込む
+    fetch('aliases.json')
+      .then(response => response.json())
+      .then(data => powershellAliases = data);
+
+    function findAlias() {
+      const command = document.getElementById('command').value.trim();
+      const resultDiv = document.getElementById('result');
+      const aliasEntry = powershellAliases.find(entry => entry.formal.toLowerCase() === command.toLowerCase());
+
+      if (aliasEntry) {
+        resultDiv.textContent = `「${command}」のエイリアス: ${Array.isArray(aliasEntry.alias) ? aliasEntry.alias.join(', ') : aliasEntry.alias}`;
+      } else {
+        resultDiv.textContent = `「${command}」のエイリアスは見つかりませんでした。`;
+      }
+    }
+  </script>
+</body>
+</html>

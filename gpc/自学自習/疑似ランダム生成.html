@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Advanced Random Number Generator with Filtering</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(to right, #0f0c29, #302b63, #24243e);
+        margin: 0;
+        padding: 20px;
+        color: #ffffff;
+      }
+      button {
+        background-color: #0084ff; /* Bright Blue */
+        border: none;
+        color: white;
+        padding: 12px 24px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 6px 2px;
+        cursor: pointer;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 132, 255, 0.4);
+        transition: background-color 0.3s, box-shadow 0.3s;
+      }
+      button:hover {
+        background-color: #005fcc;
+        box-shadow: 0 8px 25px rgba(0, 92, 204, 0.5);
+      }
+      #stats {
+        background-color: rgba(255, 255, 255, 0.2);
+        padding: 15px;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        position: fixed;
+        top: 10px;
+        width: calc(100% - 40px);
+        z-index: 1000;
+        box-sizing: border-box;
+      }
+      #output {
+        background-color: rgba(255, 255, 255, 0.1);
+        padding: 15px;
+        margin-top: 50px; /* Reduced margin */
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      }
+      #output div {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        padding: 12px 0;
+      }
+      #toggleButton {
+        z-index: 2000;
+        position: fixed;
+        top: 7px;
+        right: 21px;
+      }
+    </style>
+    <script>
+      let seed = 1234; // Initial seed value
+      let numbersCount = {};
+      let numbersOrder = [];
+      let timer = null;
+      let totalGenerated = 0;
+      let totalDuplicates = 0;
+
+      function generateNumber() {
+        const a = 1664525; // Multiplier
+        const c = 1013904223; // Increment
+        const m = 4294967296; // Modulus (2^32)
+        seed = (a * seed + c) % m;
+        return seed % 10000; // Return a four-digit number
+      }
+
+      function updateDisplay() {
+        let number = generateNumber();
+        let formattedNumber = ("0000" + number).slice(-4);
+        totalGenerated++;
+
+        let isNewNumber = !numbersCount.hasOwnProperty(formattedNumber);
+        numbersCount[formattedNumber] =
+          (numbersCount[formattedNumber] || 0) + 1;
+
+        if (isNewNumber) {
+          numbersOrder.unshift(formattedNumber); // Add new number to the front of the list
+        } else {
+          totalDuplicates++;
+          // Move number to the front of the list to track recency
+          numbersOrder = numbersOrder.filter((num) => num !== formattedNumber);
+          numbersOrder.unshift(formattedNumber);
+        }
+
+        displaySortedNumbers();
+        displayStats();
+      }
+
+      function displaySortedNumbers() {
+        let output = document.getElementById("output");
+        output.innerHTML = ""; // Clear the display
+
+        // Group numbers by count
+        let numbersByCount = {};
+        numbersOrder.forEach((num) => {
+          let count = numbersCount[num];
+          if (!numbersByCount[count]) {
+            numbersByCount[count] = [];
+          }
+          numbersByCount[count].push(num);
+        });
+
+        // Calculate the number of undrawn numbers
+        let totalDrawn = Object.keys(numbersByCount).reduce(
+          (acc, key) => acc + numbersByCount[key].length,
+          0
+        );
+        let undrawn = 10000 - totalDrawn;
+
+        // Sort by count and display with limitation to prevent wrapping
+        Object.keys(numbersByCount)
+          .sort((a, b) => b - a)
+          .forEach((count) => {
+            let numbers = numbersByCount[count];
+            let displayNumbers = numbers.slice(0, 10); // Limit number of displayed items
+            let numberList = displayNumbers.join(", ");
+            if (numbers.length > 10) {
+              // If more items exist than displayed
+              numberList += "..."; // Add ellipsis to indicate more items
+            }
+            output.innerHTML += `<div>${count}回目：${numbers.length}個　${numberList}</div>`;
+          });
+
+        // Display undrawn numbers count
+        output.innerHTML += `<div>0回目：${undrawn}個</div>`;
+      }
+
+      function displayStats() {
+        let stats = document.getElementById("stats");
+        let duplicateRate = ((totalDuplicates / totalGenerated) * 100).toFixed(
+          2
+        );
+        stats.innerHTML = `合計生成数: ${totalGenerated}, 重複数: ${totalDuplicates}, 重複率: ${duplicateRate}%`;
+      }
+
+      function toggleGenerating() {
+        let button = document.getElementById("toggleButton");
+        if (timer) {
+          clearInterval(timer);
+          timer = null;
+          button.textContent = "再開する";
+        } else {
+          timer = setInterval(updateDisplay); // Adjust the interval as needed
+          button.textContent = "停止する";
+        }
+      }
+
+      // Initial Stats Display
+      document.addEventListener("DOMContentLoaded", () => {
+        displayStats(); // Display initial stats on load
+      });
+    </script>
+  </head>
+  <body>
+    <div id="stats">合計生成数: 0, 重複数: 0, 重複率: 0.00%</div>
+    <button id="toggleButton" onclick="toggleGenerating()">スタート</button>
+    <div id="output"></div>
+  </body>
+</html>

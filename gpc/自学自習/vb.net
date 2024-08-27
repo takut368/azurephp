@@ -1,0 +1,29 @@
+Imports System
+Imports Microsoft.VisualBasic.Logging
+
+Module Program
+    Sub Main()
+        ' ログファイルの設定
+        Dim logFile As New FileLogTraceListener()
+        logFile.Location = LogFileLocation.ExecutableDirectory
+        logFile.LogFileName = "sample.log"
+
+        ' ログファイルリスナーを追加
+        My.Application.Log.Listeners.Add(logFile)
+
+        Try
+            ' ログ記録のテスト
+            Dim a As Integer = 0
+            Dim b As Integer = 5 / a  ' ゼロ除算エラーを意図的に発生させる
+        Catch ex As Exception
+            ' エラーログを記録
+            My.Application.Log.WriteException(ex, _
+                TraceEventType.Error, _
+                "例外が発生しました。")
+        Finally
+            ' ログリスナーをフラッシュして閉じる
+            logFile.Flush()
+            logFile.Close()
+        End Try
+    End Sub
+End Module

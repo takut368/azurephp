@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram リールダウンローダー</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            width: 250px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .download-all {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .reels-list {
+            display: none;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .reel-item {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            overflow: hidden;
+            width: 200px;
+            text-align: center;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .reel-item img {
+            width: 100%;
+            height: auto;
+        }
+
+        .reel-item button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .reel-item button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <h1>Instagram リールダウンローダー</h1>
+    <form id="reelForm" action="{{ url_for('get_reels') }}" method="post">
+        <input type="text" name="username" id="username" placeholder="Instagramユーザー名を入力" required>
+        <button type="submit">リールを取得</button>
+    </form>
+    <div class="download-all" id="downloadAll">
+        <button type="button" onclick="downloadAllReels()">すべてダウンロード</button>
+    </div>
+    <div class="reels-list" id="reelsList">
+        <!-- リールアイテムをここに表示 -->
+        {% if reels %}
+            <ul>
+                {% for reel in reels %}
+                    <li class="reel-item">
+                        <img src="{{ reel.thumbnail_url }}" alt="リールサムネイル">
+                        <a href="{{ url_for('download', media_url=reel.media_url) }}">ダウンロード</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
+    <script>
+        document.getElementById('reelForm').onsubmit = function() {
+            // リール取得後の処理
+            document.getElementById('downloadAll').style.display = 'block';
+            document.getElementById('reelsList').style.display = 'flex';
+        };
+
+        function downloadAllReels() {
+            // すべてのリール動画をダウンロードする処理
+            const reelUrls = [
+                'https://example.com/reel1.mp4',
+                'https://example.com/reel2.mp4',
+                'https://example.com/reel3.mp4'
+            ];
+
+            reelUrls.forEach(url => {
+                window.open(url, '_blank');
+            });
+        }
+    </script>
+</body>
+</html>

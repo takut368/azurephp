@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript Test</title>
+    <style>
+      #noscript-message {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        width: 300px;
+        padding: 10px;
+        background-color: #ffcccc;
+        border: 1px solid #ff0000;
+        color: #000000;
+        font-weight: bold;
+        visibility: hidden; /* 初期状態で非表示 */
+        opacity: 0;
+        transition: visibility 0s, opacity 0.5s linear;
+      }
+
+      @keyframes slideOut {
+        0% {
+          opacity: 0;
+          bottom: 10px;
+          right: -500px;
+        }
+        5% {
+          opacity: 1;
+          bottom: 10px;
+          right: 10px;
+        }
+        95% {
+          opacity: 1;
+          bottom: 10px;
+          right: 10px;
+        }
+        100% {
+          opacity: 0;
+          bottom: 10px;
+          right: -500px;
+        }
+      }
+      .show {
+        visibility: visible;
+        opacity: 1;
+        animation: slideOut 25s forwards;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="noscript-message">
+      現在使用している閲覧方法は、JavaScriptが使用できないため、コードのコピーなどの機能を使用することができません。
+      htmlファイルをダウンロードして適切なブラウザで開くことで完全な機能を使用することができます。
+    </div>
+    <noscript>
+      <style>
+        #noscript-message {
+          visibility: visible;
+          opacity: 1;
+        }
+      </style>
+    </noscript>
+    <script>
+      // JavaScriptが有効な場合はメッセージを非表示
+      document.getElementById("noscript-message").classList.add("show");
+    </script>
+  </body>
+</html>

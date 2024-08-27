@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ランダムパスワード生成器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+        .container {
+            background-color: #fff;
+            padding: 16px;
+            border-radius: 10px;
+            box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+            width: 340px;
+            text-align: center;
+            position: relative;
+        }
+        .title {
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+        .password-display {
+            font-size: 18px;
+            margin: 8px 0;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .password-display span {
+            display: inline-block;
+            text-align: center;
+        }
+        .toggle-visibility {
+            position: absolute;
+            right: 8px;
+            cursor: pointer;
+            display: none;
+        }
+        .strength-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 8px 0;
+            position: relative;
+        }
+        .strength-bar div {
+            height: 100%;
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: left;
+            padding-left: 6px;
+            color: white;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        .strength-bar.weak div {
+            background-color: #ff4b4b;
+        }
+        .strength-bar.medium div {
+            background-color: #ff9900;
+        }
+        .strength-bar.strong div {
+            background-color: #4caf50;
+        }
+        .controls {
+            margin: 16px 0;
+        }
+        .controls label {
+            display: block;
+            margin: 6px 0;
+            position: relative;
+            padding-left: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            user-select: none;
+        }
+        .controls input[type="number"], .controls input[type="text"] {
+            width: 120px;
+            padding: 6px;
+            margin-left: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .controls input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+        .controls .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 24px;
+            width: 24px;
+            background-color: #ccc;
+            border-radius: 4px;
+        }
+        .controls input:checked ~ .checkmark {
+            background-color: #4CAF50;
+        }
+        .controls .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+        .controls input:checked ~ .checkmark:after {
+            display: block;
+        }
+        .controls .checkmark:after {
+            left: 9px;
+            top: 5px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 3px 3px 0;
+            transform: rotate(45deg);
+        }
+        .generate-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .generate-button:hover {
+            background-color: #45a049;
+        }
+        .copy-button {
+            background-color: #008CBA;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 12px;
+        }
+        .copy-button:hover {
+            background-color: #007B9E;
+        }
+        .error-message {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #f44336;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 18px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .hidden {
+            display: none;
+        }
+        .details-info {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 16px;
+            box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            display: none;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">ランダムパスワード生成器</div>
+        <div class="password-display" id="passwordDisplay">
+            <span id="passwordText">ここにパスワードが表示されます</span>
+            <span id="toggleVisibility" class="toggle-visibility" onclick="togglePasswordVisibility()">&#128065;</span>
+        </div>
+        <div class="strength-bar" id="strengthBar"><div id="strengthScore"></div></div>
+        <div class="controls">
+            <label>
+                パスワードの長さ:
+                <input type="number" id="passwordLength" value="12" min="4" max="32">
+            </label>
+            <label>
+                <input type="checkbox" id="includeUppercase" checked>
+                <span class="checkmark"></span>
+                大文字を含める
+            </label>
+            <label>
+                <input type="checkbox" id="includeLowercase" checked>
+                <span class="checkmark"></span>
+                小文字を含める
+            </label>
+            <label>
+                <input type="checkbox" id="includeNumbers" checked>
+                <span class="checkmark"></span>
+                数字を含める
+            </label>
+            <label>
+                <input type="checkbox" id="includeSymbols">
+                <span class="checkmark"></span>
+                特殊文字を含める
+            </label>
+            <label>
+                <input type="checkbox" id="usePrefix" onclick="togglePrefixInput()">
+                <span class="checkmark"></span>
+                先頭の文字を指定
+            </label>
+            <input type="text" id="prefixInput" class="hidden" placeholder="先頭の文字">
+            <label>
+                <input type="checkbox" id="showDetails" onclick="toggleDetails()" checked>
+                <span class="checkmark"></span>
+                強度評価の詳細を表示
+            </label>
+            <label>
+                <input type="checkbox" id="hidePassword" onclick="togglePasswordHide()" checked>
+                <span class="checkmark"></span>
+                パスワードを隠す
+            </label>
+        </div>
+        <button class="generate-button" onclick="generatePassword()">パスワード生成</button>
+        <button class="copy-button" onclick="copyPassword()">コピー</button>
+        <div class="error-message" id="errorMessage"></div>
+    </div>
+
+    <div id="detailsInfo" class="details-info">
+        <h3>減点評価</h3>
+    </div>
+
+    <script>
+        function togglePrefixInput() {
+            const prefixInput = document.getElementById('prefixInput');
+            prefixInput.classList.toggle('hidden');
+        }
+
+        function showError(message) {
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.textContent = message;
+            errorMessage.style.opacity = 1;
+            setTimeout(() => {
+                errorMessage.style.opacity = 0;
+            }, 5000);
+        }
+
+        function generatePassword() {
+            const length = parseInt(document.getElementById('passwordLength').value);
+            const includeUppercase = document.getElementById('includeUppercase').checked;
+            const includeLowercase = document.getElementById('includeLowercase').checked;
+            const includeNumbers = document.getElementById('includeNumbers').checked;
+            const includeSymbols = document.getElementById('includeSymbols').checked;
+            const usePrefix = document.getElementById('usePrefix').checked;
+            let prefix = document.getElementById('prefixInput').value;
+
+            if (!includeUppercase && !includeLowercase && !includeNumbers && !includeSymbols) {
+                showError('エラー: 少なくとも1つの文字種を選択してください。');
+                return;
+            }
+
+            if (usePrefix && prefix.length > length) {
+                showError('エラー: 先頭指定文字がパスワードの長さを超えています。');
+                return;
+            }
+
+            if (!usePrefix) {
+                prefix = '';
+            }
+
+            const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const lowercase = 'abcdefghijklmnopqrstuvwxyz';
+            const numbers = '0123456789';
+            const symbols = '!@#$%^&*()_+~`|}{[]:;?><,./-=';
+            let characters = '';
+
+            if (includeUppercase) characters += uppercase;
+            if (includeLowercase) characters += lowercase;
+            if (includeNumbers) characters += numbers;
+            if (includeSymbols) characters += symbols;
+
+            let password = '';
+            for (let i = 0; i < (length - prefix.length); i++) {
+                const randomIndex = Math.floor(Math.random() * characters.length);
+                password += characters[randomIndex];
+            }
+
+            password = prefix + password;
+            displayPassword(password);
+            evaluateStrength(password, prefix);
+        }
+
+        function evaluateStrength(password, prefix) {
+            let score = 100;
+            const length = password.length - prefix.length;
+            const hasUppercase = /[A-Z]/.test(password.slice(prefix.length));
+            const hasLowercase = /[a-z]/.test(password.slice(prefix.length));
+            const hasNumbers = /[0-9]/.test(password.slice(prefix.length));
+            const hasSymbols = /[!@#$%^&*()_+~`|}{[\]:;?><,./-=]/.test(password.slice(prefix.length));
+
+            const deductions = [];
+            let totalDeductions = 0;
+
+            if (length < 8) {
+                score -= 30;
+                deductions.push({ rule: "パスワードの長さが8未満", points: 30 });
+                totalDeductions += 30;
+            } else if (length < 12) {
+                score -= 10;
+                deductions.push({ rule: "パスワードの長さが12未満", points: 10 });
+                totalDeductions += 10;
+            }
+
+            if (!hasUppercase) {
+                score -= 20;
+                deductions.push({ rule: "大文字を含まない", points: 20 });
+                totalDeductions += 20;
+            }
+            if (!hasLowercase) {
+                score -= 20;
+                deductions.push({ rule: "小文字を含まない", points: 20 });
+                totalDeductions += 20;
+            }
+            if (!hasNumbers) {
+                score -= 20;
+                deductions.push({ rule: "数字を含まない", points: 20 });
+                totalDeductions += 20;
+            }
+            if (!hasSymbols) {
+                score -= 20;
+                deductions.push({ rule: "記号を含まない", points: 20 });
+                totalDeductions += 20;
+            }
+
+            let repeatCount = 0;
+            for (let i = prefix.length + 1; i < password.length; i++) {
+                if ((isUppercase(password[i]) && isUppercase(password[i - 1])) ||
+                    (isLowercase(password[i]) && isLowercase(password[i - 1])) ||
+                    (isNumber(password[i]) && isNumber(password[i - 1])) ||
+                    (isSymbol(password[i]) && isSymbol(password[i - 1]))) {
+                    repeatCount++;
+                }
+            }
+            if (repeatCount > 0) {
+                score -= repeatCount * 3;
+                deductions.push({ rule: "連続する同じ文字種", points: repeatCount * 3 });
+                totalDeductions += repeatCount * 3;
+            }
+
+            if (prefix.length >= length / 2) {
+                score -= 30;
+                deductions.push({ rule: "プレフィックスの長さがパスワード長の半分以上", points: 30 });
+                totalDeductions += 30;
+            }
+
+            // 同じ文字が二回以上出てきた場合の減点
+            const charCount = {};
+            for (let i = prefix.length; i < password.length; i++) {
+                const char = password[i];
+                if (!charCount[char]) {
+                    charCount[char] = 0;
+                }
+                charCount[char]++;
+            }
+
+            for (const char in charCount) {
+                if (charCount[char] > 1) {
+                    score -= charCount[char];
+                    deductions.push({ rule: `文字 '${char}' が複数回出現`, points: charCount[char] });
+                    totalDeductions += charCount[char];
+                }
+            }
+
+            // 同じ文字が二連続以上で使用されている場合の減点
+            let consecutiveCount = 1;
+            for (let i = prefix.length + 1; i < password.length; i++) {
+                if (password[i] === password[i - 1]) {
+                    consecutiveCount++;
+                } else {
+                    if (consecutiveCount > 1) {
+                        score -= consecutiveCount * 2;
+                        deductions.push({ rule: `文字 '${password[i - 1]}' が連続して出現`, points: consecutiveCount * 2 });
+                        totalDeductions += consecutiveCount * 2;
+                    }
+                    consecutiveCount = 1;
+                }
+            }
+            if (consecutiveCount > 1) {
+                score -= consecutiveCount * 2;
+                deductions.push({ rule: `文字 '${password[password.length - 1]}' が連続して出現`, points: consecutiveCount * 2 });
+                totalDeductions += consecutiveCount * 2;
+            }
+
+            score = Math.max(0, score);
+
+            const strengthBar = document.getElementById('strengthBar');
+            const bar = document.getElementById('strengthScore');
+
+            bar.textContent = '強度評価：' + score + '点';
+
+            if (score >= 70) {
+                strengthBar.className = 'strength-bar strong';
+                bar.style.width = score + '%';
+            } else if (score >= 40) {
+                strengthBar.className = 'strength-bar medium';
+                bar.style.width = score + '%';
+            } else {
+                strengthBar.className = 'strength-bar weak';
+                bar.style.width = Math.max(10, score) + '%';
+            }
+
+            if (document.getElementById('showDetails').checked) {
+                displayDeductions(deductions, totalDeductions);
+            }
+        }
+
+        function displayDeductions(deductions, totalDeductions) {
+            const detailsInfo = document.getElementById('detailsInfo');
+            detailsInfo.innerHTML = "<h3>減点評価</h3>";
+            if (deductions.length > 0) {
+                deductions.forEach(deduction => {
+                    detailsInfo.innerHTML += `<p>${deduction.rule}: ${deduction.points}点 減点</p>`;
+                });
+                detailsInfo.innerHTML += `<p><strong>合計: ${totalDeductions}点 減点</strong></p>`;
+            }
+            detailsInfo.style.display = 'block';
+        }
+
+        function isUppercase(char) {
+            return /[A-Z]/.test(char);
+        }
+
+        function isLowercase(char) {
+            return /[a-z]/.test(char);
+        }
+
+        function isNumber(char) {
+            return /[0-9]/.test(char);
+        }
+
+        function isSymbol(char) {
+            return /[!@#$%^&*()_+~`|}{[\]:;?><,./-=]/.test(char);
+        }
+
+        function copyPassword() {
+            const password = document.getElementById('passwordText').dataset.password;
+            if (password === 'ここにパスワードが表示されます' || password === '') {
+                showError('エラー: パスワードが生成されていません。');
+                return;
+            }
+            navigator.clipboard.writeText(password).then(() => {
+                const copyButton = document.querySelector('.copy-button');
+                copyButton.textContent = 'done';
+                copyButton.style.backgroundColor = 'red';
+                setTimeout(() => {
+                    copyButton.textContent = 'コピー';
+                    copyButton.style.backgroundColor = '#008CBA';
+                }, 3000);
+            }, () => {
+                showError('コピーに失敗しました');
+            });
+        }
+
+        function toggleDetails() {
+            const showDetails = document.getElementById('showDetails').checked;
+            const detailsInfo = document.getElementById('detailsInfo');
+            if (showDetails) {
+                detailsInfo.style.display = 'block';
+            } else {
+                detailsInfo.style.display = 'none';
+            }
+        }
+
+        function togglePasswordHide() {
+            const hidePassword = document.getElementById('hidePassword').checked;
+            const toggleVisibility = document.getElementById('toggleVisibility');
+            if (hidePassword) {
+                maskPassword();
+                toggleVisibility.style.display = 'inline';
+            } else {
+                unmaskPassword();
+                toggleVisibility.style.display = 'none';
+            }
+        }
+
+        function togglePasswordVisibility() {
+            const passwordText = document.getElementById('passwordText');
+            if (passwordText.textContent.includes('*')) {
+                unmaskPassword();
+            } else {
+                maskPassword();
+            }
+        }
+
+        function maskPassword() {
+            const passwordText = document.getElementById('passwordText');
+            const password = passwordText.dataset.password;
+            passwordText.textContent = '*'.repeat(password.length);
+        }
+
+        function unmaskPassword() {
+            const passwordText = document.getElementById('passwordText');
+            passwordText.textContent = passwordText.dataset.password;
+        }
+
+        function displayPassword(password) {
+            const passwordText = document.getElementById('passwordText');
+            passwordText.dataset.password = password;
+            if (document.getElementById('hidePassword').checked) {
+                maskPassword();
+            } else {
+                passwordText.textContent = password;
+            }
+        }
+    </script>
+</body>
+</html>

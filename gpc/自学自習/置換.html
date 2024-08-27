@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>テキスト置換ツール</title>
+    <style>
+      textarea,
+      #output {
+        width: 100%;
+        height: 120px;
+        margin-bottom: 10px;
+        white-space: pre-wrap;
+      }
+
+      .container {
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 80%;
+        margin: auto;
+      }
+
+      #message {
+        color: red;
+      }
+
+      button {
+        padding: 10px 20px;
+        margin: 10px 0;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: all 0.3s;
+      }
+
+      .btn-green {
+        background-color: #4caf50;
+        color: white;
+      }
+      .btn-green:hover {
+        background-color: #45a049;
+      }
+      .btn-green:active {
+        transform: translateY(2px);
+      }
+
+      .btn-blue {
+        background-color: #008cba;
+        color: white;
+      }
+      .btn-blue:hover {
+        background-color: #007ba7;
+      }
+      .btn-blue:active {
+        transform: translateY(2px);
+      }
+
+      .btn-red {
+        background-color: #f44336;
+        color: white;
+      }
+      .btn-red:hover {
+        background-color: #da190b;
+      }
+      .btn-red:active {
+        transform: translateY(2px);
+      }
+
+      #helpButton {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        padding: 10px 20px;
+        background-color: #008cba;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- テキストボックス -->
+      <textarea id="inputText" placeholder="ここにテキストを入力"></textarea>
+
+      <!-- 入力フォーム（置換対象） -->
+      <div class="input-group">
+        <label for="searchText">検索する文字列 :</label>
+        <input type="text" id="searchText" />
+      </div>
+      <!-- 入力フォーム（置換後のテキスト） -->
+      <div class="input-group">
+        <label for="replaceText">置換後の文字列 :</label>
+        <input type="text" id="replaceText" />
+      </div>
+
+      <!-- 置換ボタン -->
+      <button class="btn-green" onclick="replaceText()">置換</button>
+      <!-- コピーボタン -->
+      <button class="btn-blue" onclick="copyText()">コピー</button>
+      <!-- リセットボタン -->
+      <button class="btn-red" onclick="resetForm()">リセット</button>
+
+      <!-- メッセージ -->
+      <div id="message"></div>
+
+      <!-- 出力エリア -->
+      <div id="output"></div>
+    </div>
+    <!-- ヘルプボタン -->
+    <button id="helpButton">ヘルプ</button>
+
+    <script>
+      function replaceText() {
+        const input = document.getElementById("inputText").value;
+        const searchText = document.getElementById("searchText").value;
+        const replaceText = document.getElementById("replaceText").value;
+
+        if (!searchText) {
+          document.getElementById("message").textContent =
+            "検索する文字列を入力してください。";
+          return;
+        }
+
+        const regex = new RegExp(searchText, "g");
+        const output = input.replace(regex, replaceText);
+        document.getElementById("output").textContent = output;
+        document.getElementById("message").textContent = "";
+      }
+
+      function copyText() {
+        const outputText = document.getElementById("output").textContent;
+        if (!outputText) {
+          document.getElementById("message").textContent =
+            "コピーするテキストがありません。";
+          return;
+        }
+
+        navigator.clipboard
+          .writeText(outputText)
+          .then(
+            () =>
+              (document.getElementById("message").textContent =
+                "クリップボードにコピーしました。")
+          )
+          .catch(
+            () =>
+              (document.getElementById("message").textContent =
+                "コピーに失敗しました。")
+          );
+      }
+
+      function resetForm() {
+        document.getElementById("inputText").value = "";
+        document.getElementById("searchText").value = "";
+        document.getElementById("replaceText").value = "";
+        document.getElementById("output").textContent = "";
+        document.getElementById("message").textContent = "";
+      }
+    </script>
+  </body>
+</html>

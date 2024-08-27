@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>テキスト変換ツール</title>
+    <style>
+      textarea,
+      #output {
+        width: 100%;
+        height: 120px;
+        margin-bottom: 10px;
+      }
+
+      .container {
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 80%;
+        display: block;
+        position: relative;
+        margin: 40px auto;
+        padding: 20px;
+      }
+
+      #message {
+        color: red;
+      }
+
+      button {
+        padding: 10px 20px;
+        margin: 10px 0;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: all 0.3s;
+      }
+
+      .btn-green {
+        background-color: #4caf50;
+        color: white;
+      }
+      .btn-green:hover {
+        background-color: #45a049;
+      }
+      .btn-green:active {
+        transform: translateY(2px);
+      }
+
+      .btn-blue {
+        background-color: #008cba;
+        color: white;
+      }
+      .btn-blue:hover {
+        background-color: #007ba7;
+      }
+      .btn-blue:active {
+        transform: translateY(2px);
+      }
+
+      .btn-red {
+        background-color: #f44336;
+        color: white;
+      }
+      .btn-red:hover {
+        background-color: #da190b;
+      }
+      .btn-red:active {
+        transform: translateY(2px);
+      }
+
+      #helpButton {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        padding: 10px 20px;
+        background-color: #008cba;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      .container ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        overflow: auto;
+      }
+
+      ul li {
+        color: #aaaaaa;
+        display: block;
+        position: relative;
+        float: left;
+        width: 100%;
+        height: 100px;
+        border-bottom: 1px solid #333;
+      }
+
+      ul li input[type="radio"] {
+        position: absolute;
+        visibility: hidden;
+      }
+
+      ul li label {
+        display: block;
+        position: relative;
+        font-weight: 300;
+        font-size: 1.35em;
+        padding: 25px 25px 25px 80px;
+        margin: 10px auto;
+        height: 30px;
+        z-index: 9;
+        cursor: pointer;
+        -webkit-transition: all 0.25s linear;
+      }
+
+      ul li:hover label {
+        color: #ffffff;
+      }
+
+      ul li .check {
+        display: block;
+        position: absolute;
+        border: 5px solid #aaaaaa;
+        border-radius: 100%;
+        height: 25px;
+        width: 25px;
+        top: 30px;
+        left: 20px;
+        z-index: 5;
+        transition: border 0.25s linear;
+        -webkit-transition: border 0.25s linear;
+      }
+
+      ul li:hover .check {
+        border: 5px solid #ffffff;
+      }
+
+      ul li .check::before {
+        display: block;
+        position: absolute;
+        content: "";
+        border-radius: 100%;
+        height: 15px;
+        width: 15px;
+        top: 5px;
+        left: 5px;
+        margin: auto;
+        transition: background 0.25s linear;
+        -webkit-transition: background 0.25s linear;
+      }
+
+      input[type="radio"]:checked ~ .check {
+        border: 5px solid #0dff92;
+      }
+
+      input[type="radio"]:checked ~ .check::before {
+        background: #0dff92;
+      }
+
+      input[type="radio"]:checked ~ label {
+        color: #0dff92;
+      }
+    </style>
+    <script>
+      function convertText() {
+        // テキスト挿入処理
+        const inputText = document.getElementById("inputText").value;
+        if (inputText.trim() === "") {
+          document.getElementById("message").textContent = "入力してください。";
+          return;
+        }
+
+        const format = document.querySelector(
+          'input[name="format"]:checked'
+        ).value;
+        const lines = inputText.split("\n");
+        let outputText = "";
+
+        if (format === "bullet") {
+          // 箇条書き変換
+          lines.forEach((line) => {
+            if (line.trim() !== "") {
+              outputText += `・${line}\n`;
+            }
+          });
+        } else if (format === "number") {
+          // 段落番号変換
+          lines.forEach((line, index) => {
+            if (line.trim() !== "") {
+              outputText += `${index + 1}. ${line}\n`;
+            }
+          });
+        } else if (format === "custom") {
+          // ユーザ設定
+          const customText = document.getElementById("customText").value;
+          lines.forEach((line) => {
+            if (line.trim() !== "") {
+              outputText += `${customText}${line}\n`;
+            }
+          });
+        }
+
+        document.getElementById("output").innerText = outputText;
+        document.getElementById("message").textContent = "";
+      }
+
+      function removeText() {
+        // テキスト除去処理
+        const inputText = document.getElementById("inputText").value;
+        if (inputText.trim() === "") {
+          document.getElementById("message").textContent = "入力してください。";
+          return;
+        }
+
+        const format = document.querySelector(
+          'input[name="format"]:checked'
+        ).value;
+        let outputText = inputText;
+        let originalText = outputText;
+
+        if (format === "bullet") {
+          // 箇条書きから点を除去
+          outputText = outputText.replace(/・/g, "");
+        } else if (format === "number") {
+          // 段落番号を除去
+          outputText = outputText.replace(/^[0-9]+[.,]/gm, "");
+        }
+
+        // 先頭の空白やタブを除去
+        outputText = outputText.replace(/^\s+/gm, "");
+
+        if (outputText === originalText) {
+          document.getElementById("output").innerText = "";
+          document.getElementById("message").textContent =
+            "除去対象がありませんでした。";
+        } else {
+          document.getElementById("output").innerText = outputText;
+          document.getElementById("message").textContent = "";
+        }
+      }
+
+      function copyToClipboard() {
+        // コピー処理
+        const inputText = document.getElementById("inputText").value;
+        const outputText = document.getElementById("output").innerText;
+
+        if (inputText.trim() === "") {
+          document.getElementById("message").textContent =
+            "入力してから、挿入または除去を行ってください。";
+        } else if (outputText.trim() === "") {
+          document.getElementById("message").textContent =
+            "挿入または除去を行ってください。";
+        } else {
+          navigator.clipboard.writeText(outputText).then(
+            () => {
+              document.getElementById("message").textContent =
+                "コピーされました。";
+            },
+            () => {
+              document.getElementById("message").textContent =
+                "コピーに失敗しました。";
+            }
+          );
+        }
+      }
+
+      function resetForm() {
+        // フォームリセット処理
+        document.getElementById("inputText").value = "";
+        document.getElementById("output").innerText = "";
+        document.getElementById("message").textContent = "";
+      }
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <!-- テキストボックス -->
+      <textarea id="inputText" placeholder="ここにテキストを入力"></textarea>
+      <br />
+
+      <!-- ラジオボタン -->
+      <label
+        ><input type="radio" name="format" value="bullet" checked />
+        箇条書き</label
+      >
+      <label
+        ><input type="radio" name="format" value="number" /> 段落番号</label
+      >
+      <label
+        ><input type="radio" name="format" value="custom" /> ユーザ設定</label
+      >
+
+      <!-- ユーザ設定の入力フォーム -->
+      <input
+        type="text"
+        id="customText"
+        placeholder="ここにテキストを入力"
+        style="display: none"
+      /><br />
+
+      <!-- 挿入ボタン -->
+      <button class="btn-green" onclick="convertText()">挿入</button>
+      <!-- 除去ボタン -->
+      <button class="btn-green" onclick="removeText()">除去</button>
+      <!-- コピーボタン -->
+      <button class="btn-blue" onclick="copyToClipboard()">コピー</button>
+      <!-- リセットボタン -->
+      <button class="btn-red" onclick="resetForm()">リセット</button>
+
+      <!-- メッセージ -->
+      <div id="message"></div>
+
+      <!-- 出力エリア -->
+      <div id="output"></div>
+    </div>
+    <!-- ヘルプボタン -->
+    <button id="helpButton">ヘルプ</button>
+
+    <script>
+      // ラジオボタンの状態に応じて入力フォームの表示を切り替える
+      document.querySelectorAll('input[name="format"]').forEach((radio) => {
+        radio.addEventListener("change", function () {
+          if (this.value === "custom") {
+            document.getElementById("customText").style.display = "inline";
+          } else {
+            document.getElementById("customText").style.display = "none";
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

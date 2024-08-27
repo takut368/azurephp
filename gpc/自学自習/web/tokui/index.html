@@ -1,0 +1,1776 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Microsoft Services Proficiency Form</title>
+    <style>
+      body {
+          font-family: Arial, sans-serif;
+          margin: 20px;
+          background-color: #f4f4f4;
+      }
+      h1 {
+          margin-bottom: 20px;
+      }
+      h2 {
+          margin-top: 30px;
+      }
+      .header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-weight: bold;
+          padding: 10px;
+          background-color: #ddd;
+          border-radius: 5px;
+          position: relative;
+          z-index: 1;
+      }
+      .fixed-header {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          background-color: #ddd;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      }
+      .section {
+          margin-bottom: 20px;
+          padding: 15px;
+          background-color: #ffffff;
+          border-radius: 5px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .toggle-container {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 10px 0;
+          border-bottom: 1px solid #ddd;
+      }
+      .toggle-container:last-child {
+          border-bottom: none;
+      }
+      label {
+          flex: 1;
+      }
+      .toggle {
+          position: relative;
+          display: inline-block;
+          width: 60px;
+          min-width: 60px; /* トグルの最小幅を固定 */
+          max-width: 60px; /* トグルの最大幅を固定 */
+          height: 30px;
+      }
+      .toggle input {
+          opacity: 0;
+          width: 0;
+          height: 0;
+      }
+      .slider {
+          position: absolute;
+          cursor: pointer;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: #ccc;
+          transition: .4s;
+          border-radius: 30px;
+          width: 60px; /* スライダーの幅を固定 */
+      }
+      input:checked + .slider {
+          background-color: #4CAF50;
+      }
+      input:checked + .slider:before {
+          transform: translateX(30px);
+      }
+      .slider:before {
+          position: absolute;
+          content: "";
+          height: 22px;
+          width: 22px;
+          left: 4px;
+          bottom: 4px;
+          background-color: white;
+          transition: .4s;
+          border-radius: 50%;
+      }
+      .output-button {
+          margin-top: 30px;
+          padding: 10px 20px;
+          background-color: #4CAF50;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+      }
+      .output-button:hover {
+          background-color: #45a049;
+      }
+  </style>
+  </head>
+  <body>
+    <h1>Microsoft Services Proficiency Form</h1>
+
+    <div class="section">
+      <h2>Exchange Online</h2>
+      <div class="toggle-container">
+        <label>メールボックスの作成・削除</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Exchange Online - メールボックスの作成・削除"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>メールボックスの移行</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Exchange Online - メールボックスの移行"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>メールボックスのアーカイブ設定</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Exchange Online - メールボックスのアーカイブ設定"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>共有メールボックスの作成・設定</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Exchange Online - 共有メールボックスの作成・設定"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>メールボックスのサイズ制限設定</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Exchange Online - メールボックスのサイズ制限設定"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>メールボックスのアイテム保持ポリシー設定</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Exchange Online - メールボックスのリテンションポリシー設定"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>メールボックスの自動転送設定</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Exchange Online - メールボックスの自動転送設定"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>メールボックスの外部アクセス制御</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Exchange Online - メールボックスの外部アクセス制御"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>メッセージの追跡</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Exchange Online - メッセージの追跡"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>メッセージトレースレポートの生成</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Exchange Online - メッセージトレースレポートの生成"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>メッセージの遅延原因の分析</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Exchange Online - メッセージの遅延原因の分析"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>メールフロー診断</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Exchange Online - メールフロー診断"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>DLPポリシーの作成・管理</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Exchange Online - DLPポリシーの作成・管理"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>DLPポリシーの適用範囲設定</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Exchange Online - DLPポリシーの適用範囲設定"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>DLPインシデントレポートの生成</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Exchange Online - DLPインシデントレポートの生成"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>DLPルールの調整とチューニング</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Exchange Online - DLPルールの調整とチューニング"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>メールルールの作成と管理</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Exchange Online - メールルールの作成と管理"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>メールフローのトラブルシューティング</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Exchange Online - メールフローのトラブルシューティング"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>外部メールの制御と監視</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Exchange Online - 外部メールの制御と監視"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>メールフロー監査ログの分析</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Exchange Online - メールフロー監査ログの分析"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>インプレースホールドの設定</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Exchange Online - インプレースホールドの設定"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>eDiscoveryの実行と管理</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Exchange Online - eDiscoveryの実行と管理"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>コンプライアンスレポートの生成</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Exchange Online - コンプライアンスレポートの生成"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>メッセージ暗号化の設定</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Exchange Online - メッセージ暗号化の設定"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Portal (Microsoft 365 Admin Center)</h2>
+      <div class="toggle-container">
+        <label>ユーザーの追加・削除</label>
+        <label class="toggle">
+          <input type="checkbox" data-feature="Portal - ユーザーの追加・削除" />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>ユーザー属性の編集</label>
+        <label class="toggle">
+          <input type="checkbox" data-feature="Portal - ユーザー属性の編集" />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>パスワードリセットとポリシー管理</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Portal - パスワードリセットとポリシー管理"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>MFA (多要素認証)の設定と管理</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Portal - MFA (多要素認証)の設定と管理"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>ロールベースのアクセス制御(RBAC)設定</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Portal - ロールベースのアクセス制御(RBAC)設定"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>ライセンスの割り当て・取り消し</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Portal - ライセンスの割り当て・取り消し"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>ライセンス利用状況の監視</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Portal - ライセンス利用状況の監視"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>サブスクリプションの管理</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Portal - サブスクリプションの管理"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>ライセンスの割当自動化スクリプトの作成</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Portal - ライセンスの割当自動化スクリプトの作成"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>セキュリティダッシュボードの監視</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Portal - セキュリティダッシュボードの監視"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>リスク検出とアラート管理</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Portal - リスク検出とアラート管理"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>セキュリティ設定のベストプラクティス適用</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Portal - セキュリティ設定のベストプラクティス適用"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>サインインリスクの分析と対応</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Portal - サインインリスクの分析と対応"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>使用状況レポートの生成</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Portal - 使用状況レポートの生成"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>セキュリティレポートの生成と分析</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Portal - セキュリティレポートの生成と分析"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>Microsoft Secure Scoreの監視</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Portal - Microsoft Secure Scoreの監視"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>サービス正常性とコンプライアンスレポート</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Portal - サービス正常性とコンプライアンスレポート"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Azure</h2>
+      <div class="toggle-container">
+        <label>VMの作成・削除</label>
+        <label class="toggle">
+          <input type="checkbox" data-feature="Azure - VMの作成・削除" />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>VMのバックアップとリストア</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Azure - VMのバックアップとリストア"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>VMのサイズ変更とスケール設定</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Azure - VMのサイズ変更とスケール設定"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>VMのセキュリティ設定と管理</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Azure - VMのセキュリティ設定と管理"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>ディスクの管理とスナップショット作成</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Azure - ディスクの管理とスナップショット作成"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>VMインスタンスの停止/開始/再起動</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Azure - VMインスタンスの停止/開始/再起動"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>AADユーザーとグループの管理</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Azure - AADユーザーとグループの管理"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>SSO (シングルサインオン)設定</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Azure - SSO (シングルサインオン)設定"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>条件付きアクセスの作成と適用</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Azure - 条件付きアクセスの作成と適用"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>MFAの設定と強制</label>
+        <label class="toggle">
+          <input type="checkbox" data-feature="Azure - MFAの設定と強制" />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>B2B/B2Cユーザーの管理</label>
+        <label class="toggle">
+          <input type="checkbox" data-feature="Azure - B2B/B2Cユーザーの管理" />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>サインインと監査ログの管理</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Azure - サインインと監査ログの管理"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>リソースグループの作成と削除</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Azure - リソースグループの作成と削除"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>タグ付けと管理</label>
+        <label class="toggle">
+          <input type="checkbox" data-feature="Azure - タグ付けと管理" />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>リソースグループポリシーの適用</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Azure - リソースグループポリシーの適用"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>リソースの移動と整理</label>
+        <label class="toggle">
+          <input type="checkbox" data-feature="Azure - リソースの移動と整理" />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>コスト管理と予算の設定</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Azure - コスト管理と予算の設定"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>仮想ネットワークの作成と管理</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Azure - 仮想ネットワークの作成と管理"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>サブネットとネットワークセキュリティグループの管理</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Azure - サブネットとネットワークセキュリティグループの管理"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>VPNゲートウェイの設定</label>
+        <label class="toggle">
+          <input type="checkbox" data-feature="Azure - VPNゲートウェイの設定" />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>ネットワークトラフィックの監視とトラブルシューティング</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Azure - ネットワークトラフィックの監視とトラブルシューティング"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>Azure Firewallの設定と管理</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Azure - Azure Firewallの設定と管理"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>アラートルールの作成</label>
+        <label class="toggle">
+          <input type="checkbox" data-feature="Azure - アラートルールの作成" />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>ログアナリティクスの実行</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Azure - ログアナリティクスの実行"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>Azure Service Healthの監視</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Azure - Azure Service Healthの監視"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>アプリケーションインサイトの設定と管理</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Azure - アプリケーションインサイトの設定と管理"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>パフォーマンスと診断のレポート生成</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Azure - パフォーマンスと診断のレポート生成"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Entra (formerly Azure AD)</h2>
+      <div class="toggle-container">
+        <label>ユーザーアカウントの作成・削除</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Entra - ユーザーアカウントの作成・削除"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>パスワードリセットポリシーの管理</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Entra - パスワードリセットポリシーの管理"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>ユーザーロールの割り当てと管理</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Entra - ユーザーロールの割り当てと管理"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>ユーザープロビジョニングの自動化</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Entra - ユーザープロビジョニングの自動化"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>ユーザーのディレクトリ同期設定</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Entra - ユーザーのディレクトリ同期設定"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>グループの作成・削除</label>
+        <label class="toggle">
+          <input type="checkbox" data-feature="Entra - グループの作成・削除" />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>メンバーシップルールの設定</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Entra - メンバーシップルールの設定"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>動的グループの作成と管理</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Entra - 動的グループの作成と管理"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>グループベースのライセンス割り当て</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Entra - グループベースのライセンス割り当て"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>グループに対する条件付きアクセスポリシーの適用</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Entra - グループに対する条件付きアクセスポリシーの適用"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>条件付きアクセスポリシーの作成</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Entra - 条件付きアクセスポリシーの作成"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>ポリシー適用の例外設定</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Entra - ポリシー適用の例外設定"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>条件付きアクセスレポートの監視</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Entra - 条件付きアクセスレポートの監視"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>ポリシーのテストとロールアウト</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Entra - ポリシーのテストとロールアウト"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>サインインリスクレベルの分析と対応</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Entra - サインインリスクレベルの分析と対応"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>セキュリティレポートの生成</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Entra - セキュリティレポートの生成"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>Identity Protectionの設定</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Entra - Identity Protectionの設定"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>セキュリティダッシュボードの監視</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Entra - セキュリティダッシュボードの監視"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>監査ログの分析とレポート生成</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Entra - 監査ログの分析とレポート生成"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>SharePoint</h2>
+      <div class="toggle-container">
+        <label>サイトコレクションの作成と管理</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="SharePoint - サイトコレクションの作成と管理"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>サイトテンプレートの設定</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="SharePoint - サイトテンプレートの設定"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>サイトデザインとカスタマイズ</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="SharePoint - サイトデザインとカスタマイズ"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>サイト権限の設定と管理</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="SharePoint - サイト権限の設定と管理"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>サイトナビゲーションの構成</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="SharePoint - サイトナビゲーションの構成"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>ドキュメントライブラリの作成と管理</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="SharePoint - ドキュメントライブラリの作成と管理"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>バージョン管理とドキュメントのリテンション</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="SharePoint - バージョン管理とドキュメントのリテンション"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>ドキュメントメタデータの設定</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="SharePoint - ドキュメントメタデータの設定"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>ドキュメントライブラリのビュー設定とカスタマイズ</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="SharePoint - ドキュメントライブラリのビュー設定とカスタマイズ"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>ドキュメントの同期設定</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="SharePoint - ドキュメントの同期設定"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>ファイルとフォルダの共有設定</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="SharePoint - ファイルとフォルダの共有設定"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>アクセス権の設定と管理</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="SharePoint - アクセス権の設定と管理"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>外部共有の管理</label>
+        <label class="toggle">
+          <input type="checkbox" data-feature="SharePoint - 外部共有の管理" />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>共有リンクの制御と有効期限設定</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="SharePoint - 共有リンクの制御と有効期限設定"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>ユーザーとグループのアクセス権監査</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="SharePoint - ユーザーとグループのアクセス権監査"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>検索設定のカスタマイズ</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="SharePoint - 検索設定のカスタマイズ"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>検索範囲の設定と管理</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="SharePoint - 検索範囲の設定と管理"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>検索キーワードの設定とプロモーション</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="SharePoint - 検索キーワードの設定とプロモーション"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>検索ログの分析とレポート生成</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="SharePoint - 検索ログの分析とレポート生成"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>検索結果の調整と最適化</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="SharePoint - 検索結果の調整と最適化"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Outlook</h2>
+      <div class="toggle-container">
+        <label>ルールとアラートの作成と管理</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Outlook - ルールとアラートの作成と管理"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>メールアーカイブの設定と管理</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Outlook - メールアーカイブの設定と管理"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>メールフィルターの設定</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Outlook - メールフィルターの設定"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>自動返信設定 (OOOメッセージ)</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Outlook - 自動返信設定 (OOOメッセージ)"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>メールフォルダの整理と管理</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Outlook - メールフォルダの整理と管理"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>予定表の作成と共有</label>
+        <label class="toggle">
+          <input type="checkbox" data-feature="Outlook - 予定表の作成と共有" />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>予定表権限の設定</label>
+        <label class="toggle">
+          <input type="checkbox" data-feature="Outlook - 予定表権限の設定" />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>予定表の自動予約設定</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Outlook - 予定表の自動予約設定"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>カレンダービューのカスタマイズ</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Outlook - カレンダービューのカスタマイズ"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>予定のインポート・エクスポート</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Outlook - 予定のインポート・エクスポート"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>連絡先グループの作成と管理</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Outlook - 連絡先グループの作成と管理"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>連絡先のインポート・エクスポート</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Outlook - 連絡先のインポート・エクスポート"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>連絡先の同期設定</label>
+        <label class="toggle">
+          <input type="checkbox" data-feature="Outlook - 連絡先の同期設定" />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>連絡先の整理とタグ付け</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Outlook - 連絡先の整理とタグ付け"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>連絡先の共有設定</label>
+        <label class="toggle">
+          <input type="checkbox" data-feature="Outlook - 連絡先の共有設定" />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>タスクの作成と管理</label>
+        <label class="toggle">
+          <input type="checkbox" data-feature="Outlook - タスクの作成と管理" />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>タスクリストの整理と共有</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Outlook - タスクリストの整理と共有"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>タスクリマインダーの設定</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Outlook - タスクリマインダーの設定"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>タスクの進捗管理とレポート</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Outlook - タスクの進捗管理とレポート"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>タスクの優先順位設定</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Outlook - タスクの優先順位設定"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Teams</h2>
+      <div class="toggle-container">
+        <label>チャット履歴の管理</label>
+        <label class="toggle">
+          <input type="checkbox" data-feature="Teams - チャット履歴の管理" />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>チャットのピンと整理</label>
+        <label class="toggle">
+          <input type="checkbox" data-feature="Teams - チャットのピンと整理" />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>チャットのセキュリティ設定</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Teams - チャットのセキュリティ設定"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>チャットメッセージのフォーマットとカスタマイズ</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Teams - チャットメッセージのフォーマットとカスタマイズ"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>チャットボットの設定と管理</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Teams - チャットボットの設定と管理"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>会議のスケジュールと招待管理</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Teams - 会議のスケジュールと招待管理"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>会議レコーディングの設定と管理</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Teams - 会議レコーディングの設定と管理"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>会議出席者の権限管理</label>
+        <label class="toggle">
+          <input type="checkbox" data-feature="Teams - 会議出席者の権限管理" />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>ブレイクアウトルームの作成と管理</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Teams - ブレイクアウトルームの作成と管理"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>会議のライブイベント設定</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Teams - 会議のライブイベント設定"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>チャネルの作成と削除</label>
+        <label class="toggle">
+          <input type="checkbox" data-feature="Teams - チャネルの作成と削除" />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>チャネル権限の管理</label>
+        <label class="toggle">
+          <input type="checkbox" data-feature="Teams - チャネル権限の管理" />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>プライベートチャネルの設定と管理</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Teams - プライベートチャネルの設定と管理"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>チャネルタブのカスタマイズ</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Teams - チャネルタブのカスタマイズ"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>チャネルメッセージのモデレーション</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Teams - チャネルメッセージのモデレーション"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>サードパーティアプリの統合と管理</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Teams - サードパーティアプリの統合と管理"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>ボットの設定と管理</label>
+        <label class="toggle">
+          <input type="checkbox" data-feature="Teams - ボットの設定と管理" />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>Power Automateの統合</label>
+        <label class="toggle">
+          <input type="checkbox" data-feature="Teams - Power Automateの統合" />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>カスタムアプリの展開</label>
+        <label class="toggle">
+          <input type="checkbox" data-feature="Teams - カスタムアプリの展開" />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>アプリアクセス権の設定</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Teams - アプリアクセス権の設定"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Defender</h2>
+      <div class="toggle-container">
+        <label>エンドポイント保護の設定</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Defender - エンドポイント保護の設定"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>デバイスインベントリの監視</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Defender - デバイスインベントリの監視"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>デバイス脅威インテリジェンスの管理</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Defender - デバイス脅威インテリジェンスの管理"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>デバイス監視ポリシーの適用</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Defender - デバイス監視ポリシーの適用"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>デバイスのコンプライアンス設定</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Defender - デバイスのコンプライアンス設定"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>セキュリティポリシーの作成と適用</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Defender - セキュリティポリシーの作成と適用"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>ポリシー違反の監視と対応</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Defender - ポリシー違反の監視と対応"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>ポリシーテンプレートのカスタマイズ</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Defender - ポリシーテンプレートのカスタマイズ"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>セキュリティ設定の自動化</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Defender - セキュリティ設定の自動化"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>ポリシーの監査とレポート生成</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Defender - ポリシーの監査とレポート生成"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>インシデントの検出とトリアージ</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Defender - インシデントの検出とトリアージ"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>インシデントのエスカレーション</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Defender - インシデントのエスカレーション"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>インシデントレポートの生成</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Defender - インシデントレポートの生成"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>インシデントの根本原因分析</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Defender - インシデントの根本原因分析"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>インシデント対応の自動化</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Defender - インシデント対応の自動化"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>セキュリティレポートの生成と配布</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Defender - セキュリティレポートの生成と配布"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>リスク分析レポートの作成</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Defender - リスク分析レポートの作成"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>脅威インテリジェンスレポートの監視</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Defender - 脅威インテリジェンスレポートの監視"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>ポリシーコンプライアンスレポートの生成</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Defender - ポリシーコンプライアンスレポートの生成"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <label>レポートのカスタマイズと自動化</label>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            data-feature="Defender - レポートのカスタマイズと自動化"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <button class="output-button" onclick="generateOutput()">
+      Generate Output
+    </button>
+
+    <script>
+      function generateOutput() {
+        let output = "Microsoft Services Proficiency Report\n\n";
+        const toggles = document.querySelectorAll('input[type="checkbox"]');
+
+        toggles.forEach((toggle) => {
+          const feature = toggle.dataset.feature;
+          const proficiency = toggle.checked ? "得意" : "不得意";
+          output += `${feature}: ${proficiency}\n`;
+        });
+
+        downloadTextFile(output, "Proficiency_Report.txt");
+      }
+
+      function downloadTextFile(content, fileName) {
+        const a = document.createElement("a");
+        const file = new Blob([content], { type: "text/plain" });
+        a.href = URL.createObjectURL(file);
+        a.download = fileName;
+        a.click();
+        URL.revokeObjectURL(a.href);
+      }
+    </script>
+  </body>
+</html>
