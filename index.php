@@ -1,179 +1,59 @@
 <?php
-// 初期設定
-$directory = isset($_GET['dir']) ? $_GET['dir'] : '.';
-$sort_key = isset($_GET['sort']) ? $_GET['sort'] : 'name';
-$order = isset($_GET['order']) ? $_GET['order'] : 'asc';
-$search = isset($_GET['search']) ? $_GET['search'] : '';
+session_start();
 
-// ディレクトリが安全か確認（ディレクトリトラバーサル攻撃を防ぐ）
-$realBase = realpath('.');
-$realUserPath = realpath($directory);
-if ($realUserPath === false || strpos($realUserPath, $realBase) !== 0) {
-    die("不正なディレクトリへのアクセス");
+// ハッシュ化されたパスワード（"kuramoto" のハッシュ）
+$correct_password_hash = '$2y$10$8TZjUqufCCWPG/WW5X6cqOepH/h7IxGDFem3riEMnbdAVHXvVHehi'; // password_hash('kuramoto', PASSWORD_DEFAULT) の結果
+
+// 既にログインしている場合は directory.php にリダイレクト
+if (isset($_SESSION['authenticated']) && $_SESSION['authenticated'] === true) {
+    header('Location: directory.php');
+    exit;
 }
 
-// ディレクトリ内のフォルダとファイルを取得
-$allItems = scandir($directory);
+// ログインフォームの送信後の処理
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $password = $_POST['password'] ?? '';
 
-// フォルダとファイルを分離
-$folders = [];
-$files = [];
-foreach ($allItems as $item) {
-    if ($item === '.' || $item === '..') {
-        continue;
-    }
-    $fullPath = $directory . DIRECTORY_SEPARATOR . $item;
-    if (is_dir($fullPath)) {
-        $folders[] = $item;
+    // パスワードが正しいかチェック
+    if (password_verify($password, $correct_password_hash)) {
+        // 正しければセッションに認証情報を保存
+        $_SESSION['authenticated'] = true;
+        header('Location: directory.php'); // 認証成功後に directory.php へリダイレクト
+        exit;
     } else {
-        $files[] = $item;
+        $error = 'パスワードが間違っています。';
     }
 }
-
-// 検索フィルタ
-if ($search !== '') {
-    $folders = array_filter($folders, function($folder) use ($search) {
-        return stripos($folder, $search) !== false;
-    });
-    $files = array_filter($files, function($file) use ($search) {
-        return stripos($file, $search) !== false;
-    });
-}
-
-// ソート関数
-function sort_items(&$items, $directory, $sort_key, $order) {
-    usort($items, function($a, $b) use ($directory, $sort_key, $order) {
-        $a_fullPath = $directory . DIRECTORY_SEPARATOR . $a;
-        $b_fullPath = $directory . DIRECTORY_SEPARATOR . $b;
-        
-        // 名前順
-        if ($sort_key === 'name') {
-            $result = strcasecmp($a, $b);
-        }
-        // 更新日順
-        elseif ($sort_key === 'date') {
-            $result = filemtime($a_fullPath) - filemtime($b_fullPath);
-        }
-        // 作成日順
-        elseif ($sort_key === 'created') {
-            $result = filectime($a_fullPath) - filectime($b_fullPath);
-        }
-        // サイズ順 (ファイルのみ)
-        elseif ($sort_key === 'size') {
-            if (is_file($a_fullPath) && is_file($b_fullPath)) {
-                $result = filesize($a_fullPath) - filesize($b_fullPath);
-            } else {
-                return 0; // フォルダはサイズに影響しない
-            }
-        }
-        // 種類順（拡張子順）
-        elseif ($sort_key === 'type') {
-            $result = strcasecmp(pathinfo($a_fullPath, PATHINFO_EXTENSION), pathinfo($b_fullPath, PATHINFO_EXTENSION));
-        } else {
-            $result = 0;
-        }
-
-        // 昇順・降順の切り替え
-        return $order === 'asc' ? $result : -$result;
-    });
-}
-
-// フォルダとファイルのソートを実施
-sort_items($folders, $directory, $sort_key, $order);
-sort_items($files, $directory, $sort_key, $order);
-
-// フォルダ・ファイル作成処理
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_POST['newFolder'])) {
-        $newFolder = $directory . DIRECTORY_SEPARATOR . basename($_POST['newFolder']);
-        if (!file_exists($newFolder)) {
-            mkdir($newFolder);
-            echo "フォルダが作成されました。";
-        } else {
-            echo "そのフォルダは既に存在しています。";
-        }
-    }
-
-    if (isset($_FILES['newFile'])) {
-        $uploadDir = $directory . DIRECTORY_SEPARATOR;
-        $uploadFile = $uploadDir . basename($_FILES['newFile']['name']);
-        if (move_uploaded_file($_FILES['newFile']['tmp_name'], $uploadFile)) {
-            echo "ファイルがアップロードされました。";
-        } else {
-            echo "アップロードに失敗しました。";
-        }
-    }
-}
-
-// ソート順の切り替えリンクのための逆順を設定
-$reverse_order = $order === 'asc' ? 'desc' : 'asc';
-
-// ヘッダーのHTML
-echo '<!DOCTYPE html>';
-echo '<html lang="ja">';
-echo '<head>';
-echo '<meta charset="UTF-8">';
-echo '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
-echo '<title>ディレクトリ一覧</title>';
-echo '<style>';
-echo 'body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4; }';
-echo '.explorer { max-width: 800px; margin: 0 auto; border: 1px solid #ccc; background-color: #fff; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }';
-echo '.explorer h1 { font-size: 24px; margin-bottom: 20px; }';
-echo '.explorer a { text-decoration: none; color: #0066cc; display: block; padding: 5px 10px; margin: 5px 0; background-color: #f9f9f9; border-radius: 4px; }';
-echo '.explorer a:hover { background-color: #e9e9e9; }';
-echo '.actions { margin-bottom: 20px; }';
-echo 'input[type="text"], input[type="file"] { padding: 5px; margin-right: 10px; }';
-echo 'input[type="submit"], button { padding: 5px 10px; background-color: #0066cc; color: white; border: none; border-radius: 4px; cursor: pointer; }';
-echo 'input[type="submit"]:hover, button:hover { background-color: #004f99; }';
-echo 'table { width: 100%; border-collapse: collapse; }';
-echo 'th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }';
-echo 'th a { color: #0066cc; text-decoration: none; }';
-echo '</style>';
-echo '</head>';
-echo '<body>';
-echo '<div class="explorer">';
-echo '<h1>フォルダ: ' . htmlspecialchars($directory) . '</h1>';
-
-// 検索フォーム
-echo '<div class="actions">';
-echo '<form method="GET">';
-echo '<input type="hidden" name="dir" value="' . htmlspecialchars($directory) . '">';
-echo '<input type="text" name="search" placeholder="検索..." value="' . htmlspecialchars($search) . '">';
-echo '<input type="submit" value="検索">';
-echo '</form>';
-echo '</div>';
-
-// ソートヘッダー
-echo '<table>';
-echo '<tr>';
-echo '<th><a href="?dir=' . urlencode($directory) . '&sort=name&order=' . $reverse_order . '">名前</a></th>';
-echo '<th><a href="?dir=' . urlencode($directory) . '&sort=date&order=' . $reverse_order . '">更新日</a></th>';
-echo '<th><a href="?dir=' . urlencode($directory) . '&sort=created&order=' . $reverse_order . '">作成日</a></th>';
-echo '<th><a href="?dir=' . urlencode($directory) . '&sort=size&order=' . $reverse_order . '">サイズ</a></th>';
-echo '<th><a href="?dir=' . urlencode($directory) . '&sort=type&order=' . $reverse_order . '">種類</a></th>';
-echo '</tr>';
-
-// フォルダ表示
-foreach ($folders as $folder) {
-    echo '<tr>';
-    echo '<td><a href="?dir=' . urlencode($directory . DIRECTORY_SEPARATOR . $folder) . '">📁 ' . htmlspecialchars($folder) . '</a></td>';
-    echo '<td>-</td><td>-</td><td>-</td><td>-</td>';
-    echo '</tr>';
-}
-
-// ファイル表示
-foreach ($files as $file) {
-    $fullPath = $directory . DIRECTORY_SEPARATOR . $file;
-    echo '<tr>';
-    echo '<td><a href="' . urlencode($fullPath) . '" target="_blank">📄 ' . htmlspecialchars($file) . '</a></td>';
-    echo '<td>' . date("Y/m/d H:i:s", filemtime($fullPath)) . '</td>';
-    echo '<td>' . date("Y/m/d H:i:s", filectime($fullPath)) . '</td>';
-    echo '<td>' . (is_file($fullPath) ? filesize($fullPath) . ' bytes' : '-') . '</td>';
-    echo '<td>' . strtoupper(pathinfo($fullPath, PATHINFO_EXTENSION)) . '</td>';
-    echo '</tr>';
-}
-echo '</table>';
-echo '</div>';
-echo '</body>';
-echo '</html>';
 ?>
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>認証ページ</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; }
+        .login-form { max-width: 400px; margin: 0 auto; background-color: #fff; padding: 20px; border: 1px solid #ccc; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        .login-form h1 { text-align: center; margin-bottom: 20px; }
+        .login-form input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        .login-form button { width: 100%; padding: 10px; background-color: #0066cc; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .login-form button:hover { background-color: #005bb5; }
+        .error { color: red; text-align: center; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="login-form">
+    <h1>パスワード認証</h1>
+    <?php if (isset($error)): ?>
+        <p class="error"><?= htmlspecialchars($error) ?></p>
+    <?php endif; ?>
+    <form action="" method="post">
+        <input type="password" name="password" placeholder="パスワードを入力" required>
+        <button type="submit">ログイン</button>
+    </form>
+</div>
+
+</body>
+</html>
