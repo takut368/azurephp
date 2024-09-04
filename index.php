@@ -1,7 +1,8 @@
 <?php
 // 初期設定
 $directory = isset($_GET['dir']) ? $_GET['dir'] : '.';
-$sort = isset($_GET['sort']) ? $_GET['sort'] : 'name';
+$sort_key = isset($_GET['sort']) ? $_GET['sort'] : 'name';
+$order = isset($_GET['order']) ? $_GET['order'] : 'asc';
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 
 // ディレクトリが安全か確認（ディレクトリトラバーサル攻撃を防ぐ）
@@ -12,25 +13,74 @@ if ($realUserPath === false || strpos($realUserPath, $realBase) !== 0) {
 }
 
 // ディレクトリ内のフォルダとファイルを取得
-$files = scandir($directory);
+$allItems = scandir($directory);
+
+// フォルダとファイルを分離
+$folders = [];
+$files = [];
+foreach ($allItems as $item) {
+    if ($item === '.' || $item === '..') {
+        continue;
+    }
+    $fullPath = $directory . DIRECTORY_SEPARATOR . $item;
+    if (is_dir($fullPath)) {
+        $folders[] = $item;
+    } else {
+        $files[] = $item;
+    }
+}
 
 // 検索フィルタ
 if ($search !== '') {
+    $folders = array_filter($folders, function($folder) use ($search) {
+        return stripos($folder, $search) !== false;
+    });
     $files = array_filter($files, function($file) use ($search) {
         return stripos($file, $search) !== false;
     });
 }
 
-// ソート処理
-if ($sort === 'name') {
-    usort($files, function($a, $b) use ($directory) {
-        return strcmp($a, $b);
-    });
-} elseif ($sort === 'date') {
-    usort($files, function($a, $b) use ($directory) {
-        return filemtime($directory . '/' . $b) - filemtime($directory . '/' . $a); // 日付順
+// ソート関数
+function sort_items(&$items, $directory, $sort_key, $order) {
+    usort($items, function($a, $b) use ($directory, $sort_key, $order) {
+        $a_fullPath = $directory . DIRECTORY_SEPARATOR . $a;
+        $b_fullPath = $directory . DIRECTORY_SEPARATOR . $b;
+        
+        // 名前順
+        if ($sort_key === 'name') {
+            $result = strcasecmp($a, $b);
+        }
+        // 更新日順
+        elseif ($sort_key === 'date') {
+            $result = filemtime($a_fullPath) - filemtime($b_fullPath);
+        }
+        // 作成日順
+        elseif ($sort_key === 'created') {
+            $result = filectime($a_fullPath) - filectime($b_fullPath);
+        }
+        // サイズ順 (ファイルのみ)
+        elseif ($sort_key === 'size') {
+            if (is_file($a_fullPath) && is_file($b_fullPath)) {
+                $result = filesize($a_fullPath) - filesize($b_fullPath);
+            } else {
+                return 0; // フォルダはサイズに影響しない
+            }
+        }
+        // 種類順（拡張子順）
+        elseif ($sort_key === 'type') {
+            $result = strcasecmp(pathinfo($a_fullPath, PATHINFO_EXTENSION), pathinfo($b_fullPath, PATHINFO_EXTENSION));
+        } else {
+            $result = 0;
+        }
+
+        // 昇順・降順の切り替え
+        return $order === 'asc' ? $result : -$result;
     });
 }
+
+// フォルダとファイルのソートを実施
+sort_items($folders, $directory, $sort_key, $order);
+sort_items($files, $directory, $sort_key, $order);
 
 // フォルダ・ファイル作成処理
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -55,6 +105,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
+// ソート順の切り替えリンクのための逆順を設定
+$reverse_order = $order === 'asc' ? 'desc' : 'asc';
+
 // ヘッダーのHTML
 echo '<!DOCTYPE html>';
 echo '<html lang="ja">';
@@ -72,6 +125,9 @@ echo '.actions { margin-bottom: 20px; }';
 echo 'input[type="text"], input[type="file"] { padding: 5px; margin-right: 10px; }';
 echo 'input[type="submit"], button { padding: 5px 10px; background-color: #0066cc; color: white; border: none; border-radius: 4px; cursor: pointer; }';
 echo 'input[type="submit"]:hover, button:hover { background-color: #004f99; }';
+echo 'table { width: 100%; border-collapse: collapse; }';
+echo 'th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }';
+echo 'th a { color: #0066cc; text-decoration: none; }';
 echo '</style>';
 echo '</head>';
 echo '<body>';
@@ -87,53 +143,36 @@ echo '<input type="submit" value="検索">';
 echo '</form>';
 echo '</div>';
 
-// ソートフォーム
-echo '<div class="actions">';
-echo '<form method="GET">';
-echo '<input type="hidden" name="dir" value="' . htmlspecialchars($directory) . '">';
-echo '<label>ソート: </label>';
-echo '<button type="submit" name="sort" value="name"' . ($sort === 'name' ? ' disabled' : '') . '>名前順</button>';
-echo '<button type="submit" name="sort" value="date"' . ($sort === 'date' ? ' disabled' : '') . '>日付順</button>';
-echo '</form>';
-echo '</div>';
+// ソートヘッダー
+echo '<table>';
+echo '<tr>';
+echo '<th><a href="?dir=' . urlencode($directory) . '&sort=name&order=' . $reverse_order . '">名前</a></th>';
+echo '<th><a href="?dir=' . urlencode($directory) . '&sort=date&order=' . $reverse_order . '">更新日</a></th>';
+echo '<th><a href="?dir=' . urlencode($directory) . '&sort=created&order=' . $reverse_order . '">作成日</a></th>';
+echo '<th><a href="?dir=' . urlencode($directory) . '&sort=size&order=' . $reverse_order . '">サイズ</a></th>';
+echo '<th><a href="?dir=' . urlencode($directory) . '&sort=type&order=' . $reverse_order . '">種類</a></th>';
+echo '</tr>';
 
-// フォルダ作成フォーム
-echo '<div class="actions">';
-echo '<form method="POST">';
-echo '<input type="text" name="newFolder" placeholder="新しいフォルダ名">';
-echo '<input type="submit" value="フォルダ作成">';
-echo '</form>';
-echo '</div>';
-
-// ファイルアップロードフォーム
-echo '<div class="actions">';
-echo '<form method="POST" enctype="multipart/form-data">';
-echo '<input type="file" name="newFile">';
-echo '<input type="submit" value="ファイルアップロード">';
-echo '</form>';
-echo '</div>';
-
-// 戻るリンク
-if ($directory !== '.') {
-    $parentDir = dirname($directory);
-    echo '<li><a href="?dir=' . urlencode($parentDir) . '">⏪ 上のフォルダに戻る</a></li>';
+// フォルダ表示
+foreach ($folders as $folder) {
+    echo '<tr>';
+    echo '<td><a href="?dir=' . urlencode($directory . DIRECTORY_SEPARATOR . $folder) . '">📁 ' . htmlspecialchars($folder) . '</a></td>';
+    echo '<td>-</td><td>-</td><td>-</td><td>-</td>';
+    echo '</tr>';
 }
 
-// フォルダとファイルの表示
-echo '<ul>';
+// ファイル表示
 foreach ($files as $file) {
-    if ($file === '.' || $file === '..') {
-        continue;
-    }
-
     $fullPath = $directory . DIRECTORY_SEPARATOR . $file;
-    if (is_dir($fullPath)) {
-        echo '<li><a href="?dir=' . urlencode($fullPath) . '">📁 ' . htmlspecialchars($file) . '</a></li>';
-    } else {
-        echo '<li><a href="' . urlencode($fullPath) . '" target="_blank">📄 ' . htmlspecialchars($file) . '</a></li>';
-    }
+    echo '<tr>';
+    echo '<td><a href="' . urlencode($fullPath) . '" target="_blank">📄 ' . htmlspecialchars($file) . '</a></td>';
+    echo '<td>' . date("Y/m/d H:i:s", filemtime($fullPath)) . '</td>';
+    echo '<td>' . date("Y/m/d H:i:s", filectime($fullPath)) . '</td>';
+    echo '<td>' . (is_file($fullPath) ? filesize($fullPath) . ' bytes' : '-') . '</td>';
+    echo '<td>' . strtoupper(pathinfo($fullPath, PATHINFO_EXTENSION)) . '</td>';
+    echo '</tr>';
 }
-echo '</ul>';
+echo '</table>';
 echo '</div>';
 echo '</body>';
 echo '</html>';
