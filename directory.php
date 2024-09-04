@@ -7,6 +7,13 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
     exit;
 }
 
+// ログアウト処理
+if (isset($_GET['logout'])) {
+    session_destroy();
+    header('Location: index.php');
+    exit;
+}
+
 // 初期設定
 $directory = isset($_GET['dir']) ? $_GET['dir'] : '.';
 $sort_key = isset($_GET['sort']) ? $_GET['sort'] : 'name';
@@ -106,16 +113,23 @@ echo '.explorer { max-width: 800px; margin: 0 auto; border: 1px solid #ccc; back
 echo '.explorer h1 { font-size: 24px; margin-bottom: 20px; }';
 echo '.explorer a { text-decoration: none; color: #0066cc; display: block; padding: 5px 10px; margin: 5px 0; background-color: #f9f9f9; border-radius: 4px; }';
 echo '.explorer a:hover { background-color: #e9e9e9; }';
-echo '.actions { margin-bottom: 20px; }';
-echo 'input[type="text"], input[type="file"] { padding: 5px; margin-right: 10px; }';
-echo 'input[type="submit"], button { padding: 5px 10px; background-color: #0066cc; color: white; border: none; border-radius: 4px; cursor: pointer; }';
-echo 'input[type="submit"]:hover, button:hover { background-color: #004f99; }';
+echo '.logout { position: absolute; top: 20px; right: 20px; }';
+echo 'button { padding: 10px 20px; background-color: #0066cc; color: white; border: none; border-radius: 5px; cursor: pointer; }';
+echo 'button:hover { background-color: #005bb5; }';
 echo 'table { width: 100%; border-collapse: collapse; }';
 echo 'th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }';
 echo 'th a { color: #0066cc; text-decoration: none; }';
 echo '</style>';
 echo '</head>';
 echo '<body>';
+
+// ログアウトボタンを右上に表示
+echo '<div class="logout">';
+echo '<form action="directory.php" method="get">';
+echo '<button type="submit" name="logout">ログアウト</button>';
+echo '</form>';
+echo '</div>';
+
 echo '<div class="explorer">';
 echo '<h1>フォルダ: ' . htmlspecialchars($directory) . '</h1>';
 
