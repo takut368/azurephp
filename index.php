@@ -1,8 +1,7 @@
 <?php
 session_start();
 
-// ハッシュ化されたパスワード（"kuramoto" のハッシュ）
-$correct_password_hash = '$2y$10$8TZjUqufCCWPG/WW5X6cqOepH/h7IxGDFem3riEMnbdAVHXvVHehi'; // password_hash('kuramoto', PASSWORD_DEFAULT) の結果
+$correct_password_hash = '$2y$10$8TZjUqufCCWPG/WW5X6cqOepH/h7IxGDFem3riEMnbdAVHXvVHehi';
 
 // 既にログインしている場合は directory.php にリダイレクト
 if (isset($_SESSION['authenticated']) && $_SESSION['authenticated'] === true) {
@@ -18,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (password_verify($password, $correct_password_hash)) {
         // 正しければセッションに認証情報を保存
         $_SESSION['authenticated'] = true;
-        header('Location: directory.php'); // 認証成功後に directory.php へリダイレクト
+        header('Location: directory.php');
         exit;
     } else {
         $error = 'パスワードが間違っています。';
