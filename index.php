@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-$correct_password_hash = '$2y$10$MtrHoIZWNVr/3Qd8GHkq7ui5dSO8WWFegqvRE7HcvAVTUPy1OnX4';
+$correct_password_hash = '$2y$10$MtrHoIZWNVr/3Qd8GHkq7ui5dSO8WWFegqvRE7HcvAVTUPy1OnX4.';
 
 // 既にログインしている場合は directory.php にリダイレクト
 if (isset($_SESSION['authenticated']) && $_SESSION['authenticated'] === true) {
