@@ -131,10 +131,10 @@
 <h1>登録フォーム</h1>
 
 <?php
-// データ保存処理
 $filePath = 'form_data.json';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // 既存のJSONファイルからデータを読み込む
+    // 既存のデータを読み込む
     $existingData = [];
 
     if (file_exists($filePath)) {
