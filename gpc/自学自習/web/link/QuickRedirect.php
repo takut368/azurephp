@@ -134,6 +134,7 @@
 // Azure App Serviceで書き込み可能なディレクトリにファイルを保存する
 $filePath = '/home/site/wwwroot/form_data.json';
 
+// POST送信後にリダイレクトを行い、重複登録を防ぐ
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // 既存のデータを読み込む
     $existingData = [];
@@ -161,7 +162,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // JSONファイルに保存
     file_put_contents($filePath, json_encode($existingData, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
 
-    echo "<p>データが保存されました。</p>";
+    // 重複登録を防ぐためにリダイレクト
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit;
 }
 ?>
 
