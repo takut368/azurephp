@@ -120,6 +120,12 @@ echo 'table { width: 100%; border-collapse: collapse; }';
 echo 'th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }';
 echo 'th a { color: #0066cc; text-decoration: none; }';
 echo '</style>';
+
+// ページを5秒ごとにリロードするためのJavaScript
+echo '<script>';
+echo 'setTimeout(function() { window.location.reload(); }, 5000);'; // 5秒後にページをリロード
+echo '</script>';
+
 echo '</head>';
 echo '<body>';
 
