@@ -131,7 +131,8 @@
 <h1>登録フォーム</h1>
 
 <?php
-$filePath = 'form_data.json';
+// Azure App Serviceで書き込み可能なディレクトリにファイルを保存する
+$filePath = '/home/site/wwwroot/form_data.json';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // 既存のデータを読み込む
